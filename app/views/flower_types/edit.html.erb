@@ -1,0 +1,21 @@
+<h2>花の種類を編集</h2>
+
+<%= form_with model: @flower_type, local: true, multipart: true, data: { turbo: false } do |f| %>
+  <div>
+    <%= f.label :name, "花の種類の名前" %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :image, "画像をアップロード（変更しない場合は空のまま）" %><br>
+    <%= f.file_field :image %>
+  </div>
+
+  <div>
+    <%= f.submit "更新する" %>
+  </div>
+<% end %>
+
+<%= form_with url: flower_type_path(@flower_type), method: :delete, data: { turbo: false } do %>
+  <%= submit_tag "削除する", data: { confirm: "本当に削除してもよろしいですか？" } %>
+<% end %>

@@ -1,0 +1,21 @@
+<%= form_with model: @order, url: confirm_orders_path, method: :post, local: true, data: { turbo: false } do |f| %>
+
+  <%# メニューの選択 %>
+  <h2>1.メニューの選択</h2>
+  
+  <% @flower_types.each do |type| %>
+    <label>
+      <%= f.radio_button :flower_type_id, type.id, id: "flower_type_#{type.id}", style: "display: none;" %>
+
+      <div data-flower-type-id="<%= type.id %>">
+        <% if type.image.attached? %>
+          <%= image_tag type.image.variant(resize_to_limit: [200, 200]), alt: type.name %>
+        <% end %>
+        <p><%= type.name %></p>
+      </div>
+    </label>
+  <% end %>
+  <%# /メニューの選択 %>
+
+<% end %>
+

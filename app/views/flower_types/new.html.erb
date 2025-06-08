@@ -1,0 +1,17 @@
+<h2>花の種類を登録</h2>
+
+<%= form_with model: @flower_type, local: true, multipart: true, data: { turbo: false } do |f| %>
+  <div>
+    <%= f.label :name, "花の種類の名前" %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :image, "画像をアップロード" %><br>
+    <%= f.file_field :image %>
+  </div>
+
+  <div>
+    <%= f.submit "登録する" %>
+  </div>
+<% end %>
