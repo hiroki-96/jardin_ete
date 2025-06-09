@@ -1,0 +1,36 @@
+<!-- app/views/admin/sizes/edit.html.erb -->
+
+<h1><%= @flower_type.name %> のサイズを編集</h1>
+
+<%= form_with model: [@flower_type, @size], url: admin_flower_type_size_path(@flower_type, @size), method: :patch, local: true do |f| %>
+  <div>
+    <%= f.label :name, "サイズ名（例：S/M/L）" %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :price, "価格（円）" %><br>
+    <%= f.text_field :price %>
+  </div>
+
+  <div>
+    <%= f.label :image, "参考画像" %><br>
+    <% if @size.image.attached? %>
+      <p>現在の画像:</p>
+      <%= image_tag @size.image.variant(resize_to_limit: [200, 200]) %><br>
+    <% end %>
+    <%= f.file_field :image %>
+  </div>
+
+  <div>
+    <%= f.submit "更新する" %>
+  </div>
+<% end %>
+
+<%= form_with model: [@flower_type, @size], url: admin_flower_type_size_path(@flower_type, @size), method: :delete, local: true do %>
+  <div style="margin-top: 20px;">
+    <%= submit_tag "このサイズを削除する", data: { confirm: "本当に削除しますか？" } %>
+  </div>
+<% end %>
+
+<%= link_to "戻る", admin_flower_type_path(@flower_type) %>

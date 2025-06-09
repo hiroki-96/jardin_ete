@@ -1,0 +1,36 @@
+<h2>花の種類を登録</h2>
+
+<%= form_with model: @flower_type, url: admin_flower_types_path, local: true, multipart: true, data: { turbo: false } do |f| %>
+  <div>
+    <%= f.label :name, "花の種類の名前" %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :image, "花の画像" %><br>
+    <%= f.file_field :image %>
+  </div>
+
+  <h3>サイズ・価格</h3>
+
+  <div id="sizes-container">
+    <%= f.fields_for :sizes do |size_fields| %>
+      <%= render "size_fields", f: size_fields %>
+    <% end %>
+  </div>
+
+  <!-- 非表示のテンプレート（NEW_RECORDはJSで置換される） -->
+  <div id="size-template" style="display: none;">
+    <%= f.fields_for :sizes, Size.new, child_index: "NEW_RECORD" do |size_fields| %>
+      <%= render "size_fields", f: size_fields %>
+    <% end %>
+  </div>
+
+  <button type="button" id="add-size">サイズを追加する</button>
+
+  <div>
+    <%= f.submit "登録する" %>
+  </div>
+<% end %>
+
+<%= link_to "メニュー一覧に戻る", admin_flower_types_path %>

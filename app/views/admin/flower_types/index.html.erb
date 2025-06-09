@@ -1,0 +1,16 @@
+<h1>登録メニュー一覧</h1>
+
+<%= link_to '新しく花メニューを登録する', new_admin_flower_type_path, class: "button" %>
+
+<% @flower_types.each do |flower| %>
+  <div>
+    <%= link_to admin_flower_type_path(flower) do %>
+      <% if flower.image.attached? %>
+        <%= image_tag flower.image.variant(resize_to_limit: [200, 200]) %>
+      <% else %>
+        <p>画像なし</p>
+      <% end %>
+      <p><%= flower.name %></p>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,33 @@
+<!-- app/views/admin/flower_types/show.html.erb -->
+
+<h1><%= @flower_type.name %> の詳細</h1>
+
+<% if @flower_type.image.attached? %>
+  <%= image_tag @flower_type.image.variant(resize_to_limit: [300, 300]) %>
+<% else %>
+  <p>画像なし</p>
+<% end %>
+
+<h2>登録されているサイズ一覧</h2>
+
+<% @flower_type.sizes.each do |size| %>
+  <div>
+    <p>サイズ名：<%= size.name %></p>
+    <p>価格：¥<%= size.price %></p>
+
+    <% if size.image.attached? %>
+      <%= image_tag size.image.variant(resize_to_limit: [200, 200]) %>
+    <% else %>
+      <p>見本画像なし</p>
+    <% end %>
+
+    <%= link_to '編集', edit_admin_flower_type_size_path(@flower_type, size) %>
+  </div>
+  <hr>
+<% end %>
+
+<%= form_with url: admin_flower_type_path(@flower_type), method: :delete do %>
+  <%= submit_tag "この花の登録を削除する", data: { confirm: "本当に削除しますか？" } %>
+<% end %>
+
+<%= link_to 'メニュー一覧に戻る', admin_flower_types_path %>
