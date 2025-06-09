@@ -10,6 +10,9 @@ class Order < ApplicationRecord
 
   has_one_attached :reference_image
 
+  # enum設定（店頭受け取り or 配達）
+  enum receive_method: { store_pickup: 0, delivery: 1 }
+
   # ActiveHash項目のバリデーション（id: 1 は '---'）
   with_options numericality: { other_than: 1, message: "を選択してください" } do
     validates :usage_id
@@ -24,9 +27,5 @@ class Order < ApplicationRecord
   with_options if: :delivery? do
     validates :delivery_address, presence: true
     validates :delivery_name, presence: true
-  end
-
-  def delivery?
-    receive_method == 1 # enumやActiveHashの値に対応
   end
 end

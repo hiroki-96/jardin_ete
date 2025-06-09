@@ -18,13 +18,19 @@
     <% end %>
   </div>
 
-  <%# --- サイズの選択エリア（JSで動的に挿入） --- %>
-  <h2>2. サイズの選択</h2>
-  <div id="sizes-container"></div>
 
-  <!-- 用途の選択 -->
-  <h2>3.詳細</h2>
+
+  <%# --- サイズの選択エリア（JSで動的に挿入） --- %>
+  <div id="sizes-container" style="display: none;">
+    <h2>2. サイズの選択</h2>
+  </div>
+
+
+
+  <%# --- 用途の選択 --- %>
   <div id="usage-section" style="display: none;">
+    <h2>3.詳細</h2>
+
     <%= f.label :usage_id, "用途" %><br>
     <%= f.collection_select(:usage_id, Usage.all, :id, :name, {}, { id: "usage-select" }) %>
   </div>
@@ -50,4 +56,18 @@
     <%= f.text_area :memo, rows: 4 %>
   </div>
 
+
+
+  <%# --- 受け取り方法の選択 --- %>
+  <div id="receive-method-section" style="display: none;">
+    <h2>4. 受け取り方法の選択</h2>
+
+    <%= f.label :receive_method, "受け取り方法を選択してください" %><br>
+
+    <%= f.radio_button :receive_method, :store_pickup, id: "pickup", required: true %>
+    <%= f.label :receive_method_store_pickup, "店頭受け取り", for: "pickup" %><br>
+
+    <%= f.radio_button :receive_method, :delivery, id: "delivery", required: true %>
+    <%= f.label :receive_method_delivery, "配達", for: "delivery" %>
+  </div>
 <% end %>
