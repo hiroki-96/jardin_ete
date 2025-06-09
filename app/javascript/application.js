@@ -2,3 +2,4 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 import "./custom/flower_type_size"
+import "./custom/order_detail_flow"

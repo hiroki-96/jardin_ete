@@ -1,23 +1,32 @@
 class Order < ApplicationRecord
+  extend ActiveHash::Associations::ActiveRecordExtensions
+
   belongs_to :guest
   belongs_to :size
 
-  validates :usage, presence: true
-  validates :color, presence: true
-  validates :atmosphere, presence: true
-  validates :receive_method, presence: true
-  validates :receive_date, presence: true
-  validates :receive_time, presence: true
+  belongs_to_active_hash :usage
+  belongs_to_active_hash :color_tone
+  belongs_to_active_hash :mood
 
-  # 配達の場合のみバリデーション（コントローラー側で条件分岐して追加してもOK）
+  has_one_attached :reference_image
+
+  # ActiveHash項目のバリデーション（id: 1 は '---'）
+  with_options numericality: { other_than: 1, message: "を選択してください" } do
+    validates :usage_id
+    validates :color_tone_id
+    validates :mood_id
+  end
+
+  # その他必須項目
+  validates :receive_method, :receive_date, :receive_time, presence: true
+
+  # 配送時のバリデーション
   with_options if: :delivery? do
     validates :delivery_address, presence: true
     validates :delivery_name, presence: true
   end
 
   def delivery?
-    receive_method == 1 # 例：ActiveHashかenumでdelivery: 1 を想定
+    receive_method == 1 # enumやActiveHashの値に対応
   end
-
-  has_one_attached :reference_image
 end

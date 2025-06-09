@@ -14,4 +14,18 @@ class Size < ApplicationRecord
               presence: true,
               numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   end
+
+  # S → M → L → LL → XL...の順に並べる
+  scope :ordered, -> {
+    order(Arel.sql(<<~SQL.squish))
+      CASE name
+        WHEN 'S' THEN 1
+        WHEN 'M' THEN 2
+        WHEN 'L' THEN 3
+        WHEN 'LL' THEN 4
+        WHEN 'XL' THEN 5
+        ELSE 6
+      END
+    SQL
+  }
 end

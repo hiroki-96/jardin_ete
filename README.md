@@ -37,8 +37,8 @@
 | Column         | Type       | Options                        |
 |----------------|------------|--------------------------------|
 | flower_type_id | references | null: false, foreign_key: true |
-| name           | string     | null: false                    |
-| price          | integer    | null: false                    |
+| name           | string     | null: true                     |
+| price          | integer    | null: true                     |
 
 ### Association
 
