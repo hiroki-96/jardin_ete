@@ -10,6 +10,8 @@ class Order < ApplicationRecord
 
   has_one_attached :reference_image
 
+  accepts_nested_attributes_for :guest
+
   # enum設定（店頭受け取り or 配達）
   enum receive_method: { store_pickup: 0, delivery: 1 }
 
