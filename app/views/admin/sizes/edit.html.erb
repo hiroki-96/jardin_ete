@@ -27,10 +27,8 @@
   </div>
 <% end %>
 
-<%= form_with model: [@flower_type, @size], url: admin_flower_type_size_path(@flower_type, @size), method: :delete, local: true do %>
-  <div style="margin-top: 20px;">
-    <%= submit_tag "このサイズを削除する", data: { confirm: "本当に削除しますか？" } %>
-  </div>
-<% end %>
+<div style="margin-top: 20px;">
+  <%= link_to "このサイズを削除する", admin_flower_type_size_path(@flower_type, @size), data: { turbo_method: :delete, confirm: "本当に削除しますか？" } %>
+</div>
 
 <%= link_to "戻る", admin_flower_type_path(@flower_type) %>

@@ -26,8 +26,6 @@
   <hr>
 <% end %>
 
-<%= form_with url: admin_flower_type_path(@flower_type), method: :delete do %>
-  <%= submit_tag "この花の登録を削除する", data: { confirm: "本当に削除しますか？" } %>
-<% end %>
 
+<%= link_to '削除', admin_flower_type_path(@flower_type), data: { turbo_method: :delete } %>
 <%= link_to 'メニュー一覧に戻る', admin_flower_types_path %>
