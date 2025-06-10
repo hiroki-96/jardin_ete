@@ -1,142 +1,51 @@
+<% if flash[:alert] %>
+  <div class="error-messages" style="color: red; margin-bottom: 20px;">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
 <%= form_with model: @order, url: confirm_orders_path, method: :post, local: true, data: { turbo: false } do |f| %>
 
   <%# ====================== %>
   <%# --- ①花の種類の選択 --- %>
   <%# ====================== %>
-  <h2>1. メニューの選択</h2>
-
-  <div id="flower-types">
-    <% @flower_types.each do |type| %>
-      <label style="display: inline-block; margin: 10px;">
-        <%= f.radio_button :flower_type_id, type.id, id: "flower_type_#{type.id}", style: "display: none;" %>
-
-        <div class="flower-type-card" data-flower-type-id="<%= type.id %>" style="cursor: pointer;">
-          <% if type.image.attached? %>
-            <%= image_tag type.image.variant(resize_to_limit: [200, 200]), alt: type.name %>
-          <% end %>
-          <p><%= type.name %></p>
-        </div>
-      </label>
-    <% end %>
-  </div>
+  <%= render 'step1_flower_types', f: f %>
 
 
   <%# ========================= %>
   <%# --- ②サイズの選択エリア --- %>
   <%# ========================= %>
-  <div id="sizes-container" style="display: none;">
-    <h2>2. サイズの選択</h2>
-  </div>
+  <%= render 'step2_sizes' %>
 
 
   <%# ================== %>
   <%# --- ③詳細の入力 --- %>
   <%# ================== %>
-
-  <div id="usage-section" style="display: none;">
-    <h2>3.詳細</h2>
-
-  <%# --- 用途の選択 --- %>
-    <%= f.label :usage_id, "用途" %><br>
-    <%= f.collection_select(:usage_id, Usage.all, :id, :name, {}, { id: "usage-select" }) %>
-  </div>
-
-  <!-- 色味の選択 -->
-  <div id="color-tone-section" style="display: none;">
-    <%= f.label :color_tone_id, "色味" %><br>
-    <%= f.collection_select(:color_tone_id, ColorTone.all, :id, :name, {}, { id: "color-tone-select" }) %>
-  </div>
-
-  <!-- 雰囲気の選択 -->
-  <div id="mood-section" style="display: none;">
-    <%= f.label :mood_id, "雰囲気" %><br>
-    <%= f.collection_select(:mood_id, Mood.all, :id, :name, {}, { id: "mood-select" }) %>
-  </div>
-
-  <!-- 参考画像と備考 -->
-  <div id="extra-section" style="display: none;">
-    <%= f.label :reference_image, "参考画像をアップロード（任意）" %><br>
-    <%= f.file_field :reference_image %><br><br>
-
-    <%= f.label :memo, "備考欄（任意）" %><br>
-    <%= f.text_area :memo, rows: 4 %>
-  </div>
+  <%= render 'step3_details', f: f %>
 
 
   <%# ========================= %>
   <%# --- ④受け取り方法の選択 --- %>
   <%# ========================= %>
-  <div id="receive-method-section" style="display: none;">
-    <h2>4. 受け取り方法の選択</h2>
-
-    <%= f.label :receive_method, "受け取り方法を選択してください" %><br>
-
-    <%= f.radio_button :receive_method, :store_pickup, id: "pickup", required: true %>
-    <%= f.label :receive_method_store_pickup, "店頭受け取り", for: "pickup" %><br>
-
-    <%= f.radio_button :receive_method, :delivery, id: "delivery", required: true %>
-    <%= f.label :receive_method_delivery, "配達", for: "delivery" %>
-  </div>
+  <%= render 'step4_receive_method', f: f %>
 
 
   <%# ============================================== %>
   <%# --- ⑤受け取り希望日（受け取り方法の選択後に表示） --- %>
   <%# ============================================== %>
-  <div id="receive-date-section" style="display: none;">
-    <h2>5. 受け取り希望日の入力</h2>
-    
-    <label id="receive-date-label">受け取り希望日を入力してください</label><br>
-    <%= f.label :receive_date, "希望日" %><br>
-    <%= f.date_field :receive_date, min: Date.current, required: true, id: "receive-date-input" %>
-
-    <%# 配達の場合のみ表示する時間帯プルダウン %>
-    <div id="delivery-time-section" style="display: none; margin-top: 10px;">
-      <%= f.label :receive_time, "配達希望時間帯" %><br>
-      <%= f.select :receive_time, [
-            ["午前中", "09:00"],
-            ["12:00〜15:00", "12:00"],
-            ["15:00〜18:00", "15:00"],
-            ["18時以降", "18:00"]
-          ],
-          { include_blank: "選択してください" },
-          { required: true } %>
-    </div>
-  </div>
+  <%= render 'step5_receive_date', f: f %>
 
 
 
   <%# ====================== %>
   <%# --- ⑥個人情報の入力 --- %>
   <%# ====================== %>
-  <div id="guest-info-section" style="display: none;">
-    <h2>6. ご連絡先の入力</h2>
-
-    <%= f.fields_for :guest do |g| %>
-      <%= g.label :name, "お名前" %><br>
-      <%= g.text_field :name, required: true %><br><br>
-
-      <%= g.label :phone_number, "電話番号" %><br>
-      <%= g.telephone_field :phone_number, required: true %><br><br>
-
-      <%= g.label :email, "メールアドレス（任意）" %><br>
-      <%= g.email_field :email %><br><br>
-    <% end %>
-
-    <div id="delivery-fields" style="display: none;">
-      <%= f.label :delivery_address, "配達先住所" %><br>
-      <%= f.text_field :delivery_address, id: "order_delivery_address" %><br><br>
-
-      <%= f.label :delivery_name, "配達先のお名前" %><br>
-      <%= f.text_field :delivery_name, id: "order_delivery_name" %><br><br>
-    </div>
-  </div>
+  <%= render 'step6_guest_info', f: f %>
 
 
 
   <%# ================= %>
   <%# --- 確認ボタン --- %>
   <%# ================= %>
-  <div id="submit-section" style="display: none;">
-    <%= f.submit "内容を確認する" %>
-  </div>
+  <%= render "orders/steps/step7_submit_button", f: f %>
 <% end %>

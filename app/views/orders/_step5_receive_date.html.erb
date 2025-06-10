@@ -1,0 +1,20 @@
+<div id="receive-date-section" style="display: none;">
+  <h2>5. 受け取り希望日の入力</h2>
+  
+  <label id="receive-date-label">受け取り希望日を入力してください</label><br>
+  <%= f.label :receive_date, "希望日" %><br>
+  <%= f.date_field :receive_date, min: Date.current, required: true, id: "receive-date-input" %>
+
+  <%# 配達の場合のみ表示する時間帯プルダウン %>
+  <div id="delivery-time-section" style="display: none; margin-top: 10px;">
+    <%= f.label :receive_time, "配達希望時間帯" %><br>
+    <%= f.select :receive_time, [
+          ["午前中", "09:00"],
+          ["12:00〜15:00", "12:00"],
+          ["15:00〜18:00", "15:00"],
+          ["18時以降", "18:00"]
+        ],
+        { include_blank: "選択してください" },
+        { required: true } %>
+  </div>
+</div>

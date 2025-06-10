@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const deliveryAddressInput = document.getElementById("order_delivery_address");
   const deliveryNameInput = document.getElementById("order_delivery_name");
+  const receiveTimeSelect = document.getElementById("order_receive_time");
 
   // ========================
   // ① メニュー選択 → サイズ取得
@@ -86,24 +87,29 @@ document.addEventListener("DOMContentLoaded", () => {
   moodSelect?.addEventListener("change", checkAndShowReceiveMethod);
 
   // ========================
-  // ④ 受け取り方法選択 → ⑤ 日付欄表示
+  // ④ 受け取り方法選択 → ⑤ 日付欄表示 ＋ required切り替え
   // ========================
   document.getElementById("pickup")?.addEventListener("change", () => {
     deliveryTimeSection.style.display = "none";
     receiveDateSection.style.display = "block";
 
-    // 🟡 配達フィールドを非表示＋値をリセット
+    // 配達フィールドを非表示＋初期化
     deliveryFields.style.display = "none";
     if (deliveryAddressInput) deliveryAddressInput.value = "";
     if (deliveryNameInput) deliveryNameInput.value = "";
+
+    // receive_time の required を外す
+    if (receiveTimeSelect) receiveTimeSelect.required = false;
   });
 
   document.getElementById("delivery")?.addEventListener("change", () => {
     deliveryTimeSection.style.display = "block";
     receiveDateSection.style.display = "block";
 
-    // 🟢 配達フィールドを表示
     deliveryFields.style.display = "block";
+
+    // receive_time の required を付ける
+    if (receiveTimeSelect) receiveTimeSelect.required = true;
   });
 
   // ========================

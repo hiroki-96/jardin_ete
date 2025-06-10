@@ -1,0 +1,11 @@
+<div id="receive-method-section" style="display: none;">
+  <h2>4. 受け取り方法の選択</h2>
+
+  <%= f.label :receive_method, "受け取り方法を選択してください" %><br>
+
+  <%= f.radio_button :receive_method, :store_pickup, id: "pickup", required: true %>
+  <%= f.label :receive_method_store_pickup, "店頭受け取り", for: "pickup" %><br>
+
+  <%= f.radio_button :receive_method, :delivery, id: "delivery", required: true %>
+  <%= f.label :receive_method_delivery, "配達", for: "delivery" %>
+</div>

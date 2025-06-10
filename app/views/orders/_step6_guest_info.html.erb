@@ -1,0 +1,22 @@
+<div id="guest-info-section" style="display: none;">
+  <h2>6. ご連絡先の入力</h2>
+
+  <%= f.fields_for :guest do |g| %>
+    <%= g.label :name, "お名前" %><br>
+    <%= g.text_field :name, required: true %><br><br>
+
+    <%= g.label :phone_number, "電話番号" %><br>
+    <%= g.telephone_field :phone_number, required: true %><br><br>
+
+    <%= g.label :email, "メールアドレス（任意）" %><br>
+    <%= g.email_field :email %><br><br>
+  <% end %>
+
+  <div id="delivery-fields" style="display: none;">
+    <%= f.label :delivery_address, "配達先住所" %><br>
+    <%= f.text_field :delivery_address, id: "order_delivery_address" %><br><br>
+
+    <%= f.label :delivery_name, "配達先のお名前" %><br>
+    <%= f.text_field :delivery_name, id: "order_delivery_name" %><br><br>
+  </div>
+</div>

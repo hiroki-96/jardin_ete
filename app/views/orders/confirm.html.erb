@@ -1,0 +1,61 @@
+<!-- app/views/orders/confirm.html.erb -->
+
+<h2>ご注文内容の確認</h2>
+
+<p><strong>メニュー:</strong> <%= @order.flower_type.name %></p>
+<p><strong>サイズ:</strong> <%= @order.size.name %></p>
+<p><strong>用途:</strong> <%= @order.usage.name %></p>
+<p><strong>色味:</strong> <%= @order.color_tone.name %></p>
+<p><strong>雰囲気:</strong> <%= @order.mood.name %></p>
+<p><strong>参考画像:</strong> <%= image_tag @order.reference_image if @order.reference_image.attached? %></p>
+<p><strong>備考:</strong> <%= @order.memo %></p>
+<p><strong>受け取り方法:</strong> <%= @order.receive_method == "store_pickup" ? "店頭受け取り" : "配達" %></p>
+<p><strong>受け取り希望日:</strong> <%= @order.receive_date %></p>
+<% if @order.delivery? %>
+  <p><strong>配達希望時間:</strong>
+    <% label = case @order.receive_time.strftime("%H:%M")
+      when "09:00" then "午前中"
+      when "12:00" then "12:00〜15:00"
+      when "15:00" then "15:00〜18:00"
+      when "18:00" then "18時以降"
+      else
+        @order.receive_time.strftime("%H:%M")
+    end %>
+    <%= label %>
+  </p>
+<% end %>
+
+<hr>
+
+<p><strong>お名前:</strong> <%= @order.guest.name %></p>
+<p><strong>電話番号:</strong> <%= @order.guest.phone_number %></p>
+<p><strong>メール:</strong> <%= @order.guest.email %></p>
+
+<!-- 修正するボタン -->
+<%= form_with model: @order, url: new_order_path, method: :get do %>
+  <%= submit_tag "修正する" %>
+<% end %>
+
+<!-- 確定ボタン（createアクションへPOST） -->
+<%= form_with model: @order, url: orders_path, method: :post do |f| %>
+  <%= hidden_field_tag :confirmed, true %>
+  <%= f.hidden_field :flower_type_id %>
+  <%= f.hidden_field :size_id %>
+  <%= f.hidden_field :usage_id %>
+  <%= f.hidden_field :color_tone_id %>
+  <%= f.hidden_field :mood_id %>
+  <%= f.hidden_field :memo %>
+  <%= f.hidden_field :receive_method %>
+  <%= f.hidden_field :receive_date %>
+  <%= f.hidden_field :receive_time %>
+  <%= f.hidden_field :delivery_address %>
+  <%= f.hidden_field :delivery_name %>
+
+  <%= f.fields_for :guest do |g| %>
+    <%= g.hidden_field :name %>
+    <%= g.hidden_field :phone_number %>
+    <%= g.hidden_field :email %>
+  <% end %>
+
+  <%= f.submit "この内容で確定する" %>
+<% end %>
