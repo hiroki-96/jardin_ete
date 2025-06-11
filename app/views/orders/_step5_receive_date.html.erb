@@ -8,13 +8,15 @@
   <%# 配達の場合のみ表示する時間帯プルダウン %>
   <div id="delivery-time-section" style="display: none; margin-top: 10px;">
     <%= f.label :receive_time, "配達希望時間帯" %><br>
-    <%= f.select :receive_time, [
-          ["午前中", "09:00"],
-          ["12:00〜15:00", "12:00"],
-          ["15:00〜18:00", "15:00"],
-          ["18時以降", "18:00"]
-        ],
-        { include_blank: "選択してください" },
-        { required: true } %>
+    <%= f.select :receive_time,
+      options_for_select([
+        ["選択してください", ""],
+        ["午前中", "09:00"],
+        ["12:00〜15:00", "12:00"],
+        ["15:00〜18:00", "15:00"],
+        ["18時以降", "18:00"]
+      ]),
+      {}, # ← ここに required: true は絶対に入れない！
+      { id: "order_receive_time" } %>
   </div>
 </div>

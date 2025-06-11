@@ -1,27 +1,6 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("turbo:load", () => {
   const fromConfirm = sessionStorage.getItem("fromConfirm");
-  if (fromConfirm === "true") {
-    const receiveMethod = document.querySelector('input[name="order[receive_method]"]:checked')?.value;
-    const sections = [
-      "sizes-container", "usage-section", "color-tone-section", "mood-section",
-      "extra-section", "receive-method-section", "receive-date-section",
-      "guest-info-section", "submit-section"
-    ];
-    if (receiveMethod === "delivery") {
-      sections.push("delivery-time-section");
-    }
-    sections.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.style.display = "block";
-    });
-    sessionStorage.removeItem("fromConfirm");
-  }
-
-  const selectedFlowerTypeId = document.querySelector('input[name="selected_flower_type_id"]')?.value;
-  if (selectedFlowerTypeId) {
-    const card = document.querySelector(`[data-flower-type-id="${selectedFlowerTypeId}"]`);
-    if (card) card.click();
-  }
+  const receiveMethod = document.querySelector('input[name="order[receive_method]"]:checked')?.value;
 
   const sizesContainer = document.getElementById("sizes-container");
   const usageSection = document.getElementById("usage-section");
@@ -43,7 +22,56 @@ document.addEventListener("DOMContentLoaded", () => {
   const deliveryNameInput = document.getElementById("order_delivery_name");
   const receiveTimeSelect = document.getElementById("order_receive_time");
 
-  // 花の種類をクリックしたときの処理
+  if (receiveTimeSelect) {
+    receiveTimeSelect.required = false;
+    receiveTimeSelect.disabled = true;
+  }
+
+  function updateReceiveTimeField() {
+    const receiveMethod = document.querySelector('input[name="order[receive_method]"]:checked')?.value;
+    if (!receiveTimeSelect) return;
+
+    deliveryTimeSection.style.display = "none";
+    deliveryFields.style.display = "none";
+    if (deliveryAddressInput) deliveryAddressInput.value = "";
+    if (deliveryNameInput) deliveryNameInput.value = "";
+    receiveTimeSelect.required = false;
+    receiveTimeSelect.disabled = true;
+
+    receiveDateSection.style.display = "block";
+
+    if (receiveMethod === "delivery") {
+      deliveryTimeSection.style.display = "block";
+      deliveryFields.style.display = "block";
+      receiveTimeSelect.disabled = false;
+      receiveTimeSelect.required = true;
+    }
+  }
+
+  if (fromConfirm === "true") {
+    const sections = [
+      "sizes-container", "usage-section", "color-tone-section", "mood-section",
+      "extra-section", "receive-method-section", "receive-date-section",
+      "guest-info-section", "submit-section"
+    ];
+    if (receiveMethod === "delivery") {
+      sections.push("delivery-time-section");
+    }
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "block";
+    });
+
+    updateReceiveTimeField();
+    sessionStorage.removeItem("fromConfirm");
+  }
+
+  const selectedFlowerTypeId = document.querySelector('input[name="selected_flower_type_id"]')?.value;
+  if (selectedFlowerTypeId) {
+    const card = document.querySelector(`[data-flower-type-id="${selectedFlowerTypeId}"]`);
+    if (card) card.click();
+  }
+
   document.querySelectorAll(".flower-type-card").forEach((card) => {
     card.addEventListener("click", () => {
       const flowerTypeId = card.dataset.flowerTypeId;
@@ -56,7 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
           const h2 = sizesContainer.querySelector("h2");
           const customPriceSection = document.getElementById("custom-price-section");
 
-          // 必要な要素を保持したまま削除
           const keepElements = [h2, customPriceSection];
           sizesContainer.innerHTML = "";
           keepElements.forEach(el => {
@@ -90,7 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // ②③④選択後 → 受け取り方法表示
   function checkAndShowReceiveMethod() {
     if (
       usageSelect?.value && usageSelect.value !== "1" &&
@@ -105,24 +131,9 @@ document.addEventListener("DOMContentLoaded", () => {
   colorToneSelect?.addEventListener("change", checkAndShowReceiveMethod);
   moodSelect?.addEventListener("change", checkAndShowReceiveMethod);
 
-  // ④受け取り方法 → 日付欄＋配達制御
-  document.getElementById("pickup")?.addEventListener("change", () => {
-    deliveryTimeSection.style.display = "none";
-    receiveDateSection.style.display = "block";
-    deliveryFields.style.display = "none";
-    if (deliveryAddressInput) deliveryAddressInput.value = "";
-    if (deliveryNameInput) deliveryNameInput.value = "";
-    if (receiveTimeSelect) receiveTimeSelect.required = false;
-  });
+  document.getElementById("pickup")?.addEventListener("change", updateReceiveTimeField);
+  document.getElementById("delivery")?.addEventListener("change", updateReceiveTimeField);
 
-  document.getElementById("delivery")?.addEventListener("change", () => {
-    deliveryTimeSection.style.display = "block";
-    receiveDateSection.style.display = "block";
-    deliveryFields.style.display = "block";
-    if (receiveTimeSelect) receiveTimeSelect.required = true;
-  });
-
-  // ⑤ 日付入力 → ⑥連絡先と送信ボタン
   const dateInputs = document.querySelectorAll("input[name='order[receive_date]']");
   dateInputs.forEach(input => {
     input.addEventListener("change", () => {
