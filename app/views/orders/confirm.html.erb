@@ -3,7 +3,7 @@
 <h2>ご注文内容の確認</h2>
 
 <p><strong>メニュー:</strong> <%= @order.flower_type.name %></p>
-<p>ご希望金額：<%= number_to_currency(@order.custom_price, unit: "¥") %></p>
+<p><strong>ご希望金額:</strong> <%= number_with_delimiter(@order.custom_price) %> 円</p>
 <p><strong>用途:</strong> <%= @order.usage.name %></p>
 <p><strong>色味:</strong> <%= @order.color_tone.name %></p>
 <p><strong>雰囲気:</strong> <%= @order.mood.name %></p>
