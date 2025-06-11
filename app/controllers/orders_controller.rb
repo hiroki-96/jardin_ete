@@ -57,7 +57,7 @@ class OrdersController < ApplicationController
   def order_params
     params.require(:order).permit(
       :flower_type_id,
-      :size_id,
+      :custom_price,
       :usage_id,
       :color_tone_id,
       :mood_id,

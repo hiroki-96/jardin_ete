@@ -1,3 +1,14 @@
+<% f ||= local_assigns[:f] %>
+
 <div id="sizes-container" style="display: none;">
-  <h2>2. サイズの選択</h2>
+  <h2>2. ご希望金額の入力</h2>
+
+  <div id="custom-price-section" style="margin-top: 20px;">
+    <%= f.label :custom_price, "ご希望金額を入力（半角数字）" %><br>
+    <%= f.text_field :custom_price, placeholder: "例: 4500", min: 1, required: true %>
+  </div>
+
+  <div id="reference-images-wrapper" style="margin-top: 20px;">
+    <!-- JSで参考画像を挿入 -->
+  </div>
 </div>

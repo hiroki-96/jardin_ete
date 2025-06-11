@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_10_032339) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_11_055849) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -59,7 +59,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_10_032339) do
 
   create_table "orders", force: :cascade do |t|
     t.bigint "guest_id", null: false
-    t.bigint "size_id", null: false
+    t.bigint "size_id"
     t.integer "usage_id", null: false
     t.integer "color_tone_id", null: false
     t.integer "mood_id", null: false
@@ -72,6 +72,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_10_032339) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "flower_type_id"
+    t.integer "custom_price"
     t.index ["guest_id"], name: "index_orders_on_guest_id"
     t.index ["size_id"], name: "index_orders_on_size_id"
   end

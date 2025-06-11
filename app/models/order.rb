@@ -5,7 +5,6 @@ class Order < ApplicationRecord
   has_one :guest, dependent: :destroy
   accepts_nested_attributes_for :guest
 
-  belongs_to :size
   belongs_to :flower_type
 
   belongs_to_active_hash :usage
