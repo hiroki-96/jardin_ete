@@ -5,7 +5,7 @@
 
   <div id="custom-price-section" style="margin-top: 20px;">
     <%= f.label :custom_price, "ご希望金額を入力（半角数字）" %><br>
-    <%= f.text_field :custom_price, placeholder: "例: 4500", min: 1, required: true %>
+    <%= f.number_field :custom_price, id: "order_custom_price", placeholder: "例: 4500", min: 1, required: true %>
   </div>
 
   <div id="reference-images-wrapper" style="margin-top: 20px;">
