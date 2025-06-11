@@ -1,0 +1,32 @@
+<h1><%= @flower_type.name %> に参考価格と画像を追加</h1>
+
+<%= form_with model: @flower_type, url: admin_flower_type_sizes_path(@flower_type), method: :post, local: true, multipart: true do |f| %>
+  <div id="sizes-container">
+    <!-- 初期表示は空（サイズは0件） -->
+  </div>
+
+  <input type="hidden" id="existing-size-count" value="<%= @existing_size_count %>">
+
+  <button type="button" id="add-size">参考画像と価格を追加する</button>
+
+  <div style="margin-top: 20px;">
+    <%= f.submit "登録する" %>
+  </div>
+<% end %>
+
+<%= link_to "戻る", admin_flower_type_path(@flower_type) %>
+
+<!-- 非表示テンプレート（純粋なHTML） -->
+<div id="size-template" style="display: none;">
+  <div class="size-fields">
+    <div>
+      <label>価格（円）</label><br>
+      <input type="number" name="flower_type[sizes_attributes][INDEX][price]" required>
+    </div>
+    <div>
+      <label>参考画像（必須）</label><br>
+      <input type="file" name="flower_type[sizes_attributes][INDEX][image]" required>
+    </div>
+    <hr>
+  </div>
+</div>

@@ -11,23 +11,6 @@
     <%= f.file_field :image %>
   </div>
 
-  <h3>サイズ・価格</h3>
-
-  <div id="sizes-container">
-    <%= f.fields_for :sizes do |size_fields| %>
-      <%= render "size_fields", f: size_fields %>
-    <% end %>
-  </div>
-
-  <!-- 非表示のテンプレート（NEW_RECORDはJSで置換される） -->
-  <div id="size-template" style="display: none;">
-    <%= f.fields_for :sizes, Size.new, child_index: "NEW_RECORD" do |size_fields| %>
-      <%= render "size_fields", f: size_fields %>
-    <% end %>
-  </div>
-
-  <button type="button" id="add-size">サイズを追加する</button>
-
   <div>
     <%= f.submit "登録する" %>
   </div>

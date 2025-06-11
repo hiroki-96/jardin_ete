@@ -18,7 +18,7 @@ Rails.application.routes.draw do
 
   # 管理者用ルート
   namespace :admin do
-    resources :flower_types, only: [:index, :show, :new, :create, :destroy] do
+    resources :flower_types do
       resources :sizes, only: [:new, :create, :edit, :update, :destroy]
     end
   end

@@ -1,21 +1,40 @@
 <h2>花の種類を編集</h2>
 
-<%= form_with model: @flower_type, local: true, multipart: true, data: { turbo: false } do |f| %>
+<%= form_with model: @flower_type, url: admin_flower_type_path(@flower_type), method: :patch, local: true, multipart: true, data: { turbo: false } do |f| %>
   <div>
     <%= f.label :name, "花の種類の名前" %><br>
     <%= f.text_field :name %>
   </div>
 
   <div>
-    <%= f.label :image, "画像をアップロード（変更しない場合は空のまま）" %><br>
+    <%= f.label :image, "花の画像" %><br>
+    <% if @flower_type.image.attached? %>
+      <%= image_tag @flower_type.image.variant(resize_to_limit: [300, 300]) %><br>
+    <% end %>
     <%= f.file_field :image %>
   </div>
+
+  <h3>参考価格・画像（最大5枠まで）</h3>
+
+  <!-- 登録済みのサイズ -->
+  <div id="sizes-container">
+    <%= f.fields_for :sizes do |size_fields| %>
+      <%= render "size_fields", f: size_fields %>
+    <% end %>
+  </div>
+
+  <!-- 非表示テンプレート（追加用） -->
+  <div id="size-template" style="display: none;">
+    <%= f.fields_for :sizes, Size.new, child_index: "NEW_RECORD" do |size_fields| %>
+      <%= render "size_fields", f: size_fields %>
+    <% end %>
+  </div>
+
+  <button type="button" id="add-size">参考画像と価格を追加する</button>
 
   <div>
     <%= f.submit "更新する" %>
   </div>
 <% end %>
 
-<%= form_with url: flower_type_path(@flower_type), method: :delete, data: { turbo: false } do %>
-  <%= submit_tag "削除する", data: { confirm: "本当に削除してもよろしいですか？" } %>
-<% end %>
+<%= link_to "メニュー一覧に戻る", admin_flower_types_path %>

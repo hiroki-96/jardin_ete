@@ -1,18 +1,11 @@
-<div class="size-fields" data-template="size-fields">
-  <p>
-    <%= f.label :name, "サイズ名" %>
-    <%= f.text_field :name %>
-  </p>
-
-  <p>
-    <%= f.label :price, "価格" %>
-    <%= f.number_field :price %>
-  </p>
-
-  <p>
-    <%= f.label :image, "参考画像（任意）" %>
-    <%= f.file_field :image %>
-  </p>
-
+<div class="size-fields">
+  <div>
+    <%= f.label :price, "価格（円）" %><br>
+    <%= f.number_field :price, required: true %>
+  </div>
+  <div>
+    <%= f.label :image, "参考画像（必須）" %><br>
+    <%= f.file_field :image, required: true %>
+  </div>
   <hr>
 </div>
