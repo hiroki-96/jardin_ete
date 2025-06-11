@@ -1,51 +1,74 @@
 class OrdersController < ApplicationController
+  # 注文フォームの初期表示（新規 or 修正から戻った場合）
   def new
     @order = Order.new
-    @order.build_guest  # ゲスト情報の入力フォーム生成用
-    @flower_types = FlowerType.all  # メニュー選択肢表示用
-  end
 
-  def create
-    @order = Order.new(order_params)
-    if @order.save
-      redirect_to root_path, notice: "ご注文が完了しました"
+    if session[:from_confirm] && session[:order_data].is_a?(Hash) && session[:guest_data].is_a?(Hash)
+      @order.assign_attributes(session[:order_data])
+      @order.build_guest.assign_attributes(session[:guest_data])
+      session.delete(:from_confirm)
     else
-      @flower_types = FlowerType.all
-      render :new
+      @order.build_guest
     end
+
+    @flower_types = FlowerType.all
   end
 
+  # 確認画面の表示
   def confirm
     @order = Order.new(order_params)
     @guest = @order.build_guest unless @order.guest
     @flower_types = FlowerType.all
 
-    # バリデーション確認（不備があればnewに戻す）
     unless @order.valid?
-      Rails.logger.debug(@order.errors.full_messages) # ログ出力
-      flash.now[:alert] = @order.errors.full_messages.join("<br>").html_safe # ビュー用
+      Rails.logger.debug(@order.errors.full_messages)  # ログ出力
+      flash.now[:alert] = @order.errors.full_messages.join("<br>").html_safe
       return render :new
+    end
+
+    # セッションに注文内容を一時保存（修正で戻ったとき用）
+    session[:order_data] = @order.attributes
+    session[:guest_data] = @order.guest.attributes
+    session[:from_confirm] = true
+  end
+
+  # 注文確定（DBに保存）
+  def create
+    # セッションからデータを復元
+    @order = Order.new(session[:order_data])
+    @order.build_guest(session[:guest_data])
+
+    if @order.save
+      # セッション情報を削除
+      session.delete(:order_data)
+      session.delete(:guest_data)
+      session.delete(:from_confirm)
+
+      redirect_to root_path, notice: "ご注文が完了しました"
+    else
+      @flower_types = FlowerType.all
+      render :confirm
     end
   end
 
   private
 
-  # Strong Parameters（フォームで許可する項目）
+  # Strong Parameters（許可されたパラメータのみ受け取る）
   def order_params
     params.require(:order).permit(
-      :flower_type_id,     # メニュー
-      :size_id,            # サイズ
-      :usage_id,           # 用途
-      :color_tone_id,      # 色味
-      :mood_id,            # 雰囲気
-      :reference_image,    # 参考画像
-      :memo,               # 備考
-      :receive_method,     # 受け取り方法（enum）
-      :receive_date,       # 希望日
-      :receive_time,       # 希望時間
-      :delivery_address,   # 配達先住所（配達時のみ）
-      :delivery_name,      # 配達先名前（配達時のみ）
-      guest_attributes: [  # ゲスト情報（ネスト）
+      :flower_type_id,
+      :size_id,
+      :usage_id,
+      :color_tone_id,
+      :mood_id,
+      :reference_image,
+      :memo,
+      :receive_method,
+      :receive_date,
+      :receive_time,
+      :delivery_address,
+      :delivery_name,
+      guest_attributes: [
         :name,
         :phone_number,
         :email

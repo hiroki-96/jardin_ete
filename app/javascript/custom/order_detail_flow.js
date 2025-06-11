@@ -1,6 +1,49 @@
 document.addEventListener("DOMContentLoaded", () => {
   // ========================
-  // 要素の取得
+  // 修正から戻った場合、すべてのセクションを表示
+  // ========================
+  const fromConfirm = sessionStorage.getItem("fromConfirm");
+
+  if (fromConfirm === "true") {
+    const receiveMethod = document.querySelector('input[name="order[receive_method]"]:checked')?.value;
+
+    const sections = [
+      "sizes-container",
+      "usage-section",
+      "color-tone-section",
+      "mood-section",
+      "extra-section",
+      "receive-method-section",
+      "receive-date-section",
+      "guest-info-section",
+      "submit-section"
+    ];
+
+    if (receiveMethod === "delivery") {
+      sections.push("delivery-time-section");
+    }
+
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "block";
+    });
+
+    sessionStorage.removeItem("fromConfirm");
+  }
+
+  // ========================
+  // flower_type_id が hidden_field にあればそのカードを自動クリック
+  // ========================
+  const selectedFlowerTypeId = document.querySelector('input[name="selected_flower_type_id"]')?.value;
+  if (selectedFlowerTypeId) {
+    const card = document.querySelector(`[data-flower-type-id="${selectedFlowerTypeId}"]`);
+    if (card) {
+      card.click(); // サイズ選択UIを表示するためにクリックを自動発火
+    }
+  }
+
+  // ========================
+  // 各種セレクター取得
   // ========================
   const sizesContainer = document.getElementById("sizes-container");
   const usageSection = document.getElementById("usage-section");
@@ -87,18 +130,16 @@ document.addEventListener("DOMContentLoaded", () => {
   moodSelect?.addEventListener("change", checkAndShowReceiveMethod);
 
   // ========================
-  // ④ 受け取り方法選択 → ⑤ 日付欄表示 ＋ required切り替え
+  // ④ 受け取り方法選択 → ⑤ 日付欄表示 ＋ 配達関連制御
   // ========================
   document.getElementById("pickup")?.addEventListener("change", () => {
     deliveryTimeSection.style.display = "none";
     receiveDateSection.style.display = "block";
 
-    // 配達フィールドを非表示＋初期化
     deliveryFields.style.display = "none";
     if (deliveryAddressInput) deliveryAddressInput.value = "";
     if (deliveryNameInput) deliveryNameInput.value = "";
 
-    // receive_time の required を外す
     if (receiveTimeSelect) receiveTimeSelect.required = false;
   });
 
@@ -107,8 +148,6 @@ document.addEventListener("DOMContentLoaded", () => {
     receiveDateSection.style.display = "block";
 
     deliveryFields.style.display = "block";
-
-    // receive_time の required を付ける
     if (receiveTimeSelect) receiveTimeSelect.required = true;
   });
 

@@ -4,6 +4,9 @@
   </div>
 <% end %>
 
+<%# flower_type_idをセッション復元時にJSで使えるようにhiddenで埋め込む %>
+<%= hidden_field_tag 'selected_flower_type_id', @order.flower_type_id if @order.flower_type_id.present? %>
+
 <%= form_with model: @order, url: confirm_orders_path, method: :post, local: true, data: { turbo: false } do |f| %>
 
   <%# ====================== %>
