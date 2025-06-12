@@ -48,4 +48,9 @@
 <%= button_to "修正する", new_order_path, method: :get, data: { turbo: false }, onclick: "sessionStorage.setItem('fromConfirm', 'true')" %>
 
 <!-- 確定ボタン（セッションからcreateする） -->
-<%= button_to "この内容で確定する", orders_path, method: :post, form_class: "inline-form" %>
+<%= form_with url: orders_path, method: :post, local: true, class: "inline-form" do %>
+  <% if @order.reference_image.attached? %>
+    <%= hidden_field_tag 'order[reference_image_signed_id]', @order.reference_image.signed_id %>
+  <% end %>
+  <%= submit_tag "この内容で確定する" %>
+<% end %>
