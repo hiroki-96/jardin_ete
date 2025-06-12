@@ -1,56 +1,58 @@
 <!-- app/views/orders/confirm.html.erb -->
 
-<h2>ご注文内容の確認</h2>
-
-<p><strong>メニュー:</strong> <%= @order.flower_type.name %></p>
-<p><strong>ご希望金額:</strong> <%= number_with_delimiter(@order.custom_price) %> 円</p>
-<p><strong>用途:</strong> <%= @order.usage.name %></p>
-<p><strong>色味:</strong> <%= @order.color_tone.name %></p>
-<p><strong>雰囲気:</strong> <%= @order.mood.name %></p>
-<%# 参考画像のsigned_idをhiddenで渡す（保存済みレコードのみ） %>
-<% if @order.reference_image.attached? && @order.reference_image.attachment&.record.persisted? %>
-  <%= hidden_field_tag 'order[reference_image_signed_id]', @order.reference_image.signed_id %>
-<% end %>
-<p><strong>参考画像:</strong>
-  <% if @order.reference_image.attached? %>
-    <%= image_tag @order.reference_image.variant(resize_to_limit: [300, 300]), class: "img-thumbnail", alt: "参考画像" %>
-  <% else %>
-    参考画像なし
-  <% end %>
-</p>
-<p><strong>備考:</strong> <%= @order.memo %></p>
-<p><strong>受け取り方法:</strong> <%= @order.receive_method == "store_pickup" ? "店頭受け取り" : "配達" %></p>
-<p><strong>受け取り希望日:</strong> <%= @order.receive_date %></p>
-
-<% if @order.delivery? %>
-  <p><strong>配達希望時間:</strong>
-    <% label = case @order.receive_time.strftime("%H:%M")
-      when "09:00" then "午前中"
-      when "12:00" then "12:00〜15:00"
-      when "15:00" then "15:00〜18:00"
-      when "18:00" then "18時以降"
-      else
-        @order.receive_time.strftime("%H:%M")
-    end %>
-    <%= label %>
-  </p>
-  <p><strong>配達先の名前:</strong> <%= @order.delivery_name %></p>
-  <p><strong>配達先の住所:</strong> <%= @order.delivery_address %></p>
-<% end %>
-
-<hr>
-
-<p><strong>お名前:</strong> <%= @order.guest.name %></p>
-<p><strong>電話番号:</strong> <%= @order.guest.phone_number %></p>
-<p><strong>メール:</strong> <%= @order.guest.email %></p>
-
-<!-- 修正するボタン -->
-<%= button_to "修正する", new_order_path, method: :get, data: { turbo: false }, onclick: "sessionStorage.setItem('fromConfirm', 'true')" %>
-
-<!-- 確定ボタン（セッションからcreateする） -->
-<%= form_with url: orders_path, method: :post, local: true, class: "inline-form" do %>
-  <% if @order.reference_image.attached? %>
-    <%= hidden_field_tag 'order[reference_image_signed_id]', @order.reference_image.signed_id %>
-  <% end %>
-  <%= submit_tag "この内容で確定する" %>
-<% end %>
+<div class="order-confirm-wrapper">
+  <div class="order-confirm-brand">jardin_ete</div>
+  <div class="order-confirm-title">ご注文内容の確認</div>
+  <div class="order-confirm-card mb-3">
+    <div class="mb-2"><strong>メニュー:</strong> <%= @order.flower_type.name %></div>
+    <div class="mb-2"><strong>ご希望金額:</strong> <%= number_with_delimiter(@order.custom_price) %> 円</div>
+    <div class="mb-2"><strong>用途:</strong> <%= @order.usage.name %></div>
+    <div class="mb-2"><strong>色味:</strong> <%= @order.color_tone.name %></div>
+    <div class="mb-2"><strong>雰囲気:</strong> <%= @order.mood.name %></div>
+    <%# 参考画像のsigned_idをhiddenで渡す（保存済みレコードのみ） %>
+    <% if @order.reference_image.attached? && @order.reference_image.attachment&.record.persisted? %>
+      <%= hidden_field_tag 'order[reference_image_signed_id]', @order.reference_image.signed_id %>
+    <% end %>
+    <div class="mb-2"><strong>参考画像:</strong>
+      <% if @order.reference_image.attached? %>
+        <%= image_tag @order.reference_image.variant(resize_to_limit: [300, 300]), class: "img-thumbnail", alt: "参考画像" %>
+      <% else %>
+        参考画像なし
+      <% end %>
+    </div>
+    <div class="mb-2"><strong>備考:</strong> <%= @order.memo %></div>
+  </div>
+  <div class="order-confirm-card mb-3">
+    <div class="mb-2"><strong>受け取り方法:</strong> <%= @order.receive_method == "store_pickup" ? "店頭受け取り" : "配達" %></div>
+    <div class="mb-2"><strong>受け取り希望日:</strong> <%= @order.receive_date %></div>
+    <% if @order.delivery? %>
+      <div class="mb-2"><strong>配達希望時間:</strong>
+        <% label = case @order.receive_time.strftime("%H:%M")
+          when "09:00" then "午前中"
+          when "12:00" then "12:00〜15:00"
+          when "15:00" then "15:00〜18:00"
+          when "18:00" then "18時以降"
+          else
+            @order.receive_time.strftime("%H:%M")
+        end %>
+        <%= label %>
+      </div>
+      <div class="mb-2"><strong>配達先の名前:</strong> <%= @order.delivery_name %></div>
+      <div class="mb-2"><strong>配達先の住所:</strong> <%= @order.delivery_address %></div>
+    <% end %>
+  </div>
+  <div class="order-confirm-card mb-3">
+    <div class="mb-2"><strong>お名前:</strong> <%= @order.guest.name %></div>
+    <div class="mb-2"><strong>電話番号:</strong> <%= @order.guest.phone_number %></div>
+    <div class="mb-2"><strong>メール:</strong> <%= @order.guest.email %></div>
+  </div>
+  <div class="order-confirm-btns">
+    <%= button_to "修正する", new_order_path, method: :get, data: { turbo: false }, onclick: "sessionStorage.setItem('fromConfirm', 'true')", class: "btn btn-outline-secondary w-100" %>
+    <%= form_with url: orders_path, method: :post, local: true, class: "inline-form w-100" do %>
+      <% if @order.reference_image.attached? %>
+        <%= hidden_field_tag 'order[reference_image_signed_id]', @order.reference_image.signed_id %>
+      <% end %>
+      <%= submit_tag "この内容で確定する", class: "btn btn-primary w-100" %>
+    <% end %>
+  </div>
+</div>

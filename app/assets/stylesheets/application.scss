@@ -447,3 +447,62 @@ body {
     height: 2px;
   }
 }
+
+.order-confirm-wrapper {
+  background: #fff;
+  border: 2.5px solid #b6a179;
+  border-radius: 2.2rem;
+  box-shadow: 0 8px 32px rgba(182,161,121,0.08), 0 1.5px 8px rgba(0,0,0,0.04);
+  padding: 2.2rem 1.2rem 1.5rem 1.2rem;
+  max-width: 540px;
+  margin: 2.5rem auto 2rem auto;
+  position: relative;
+}
+.order-confirm-card {
+  background: #faf9f7;
+  border-radius: 1.3rem;
+  box-shadow: 0 2px 12px rgba(182,161,121,0.07);
+  padding: 1.3rem 1rem 1.1rem 1rem;
+  margin-bottom: 1.5rem;
+  border: 1.5px solid #e7e2d7;
+}
+.order-confirm-title {
+  font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #b6a179;
+  letter-spacing: 0.08em;
+  text-align: center;
+  margin-bottom: 0.7rem;
+}
+.order-confirm-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.1rem;
+  color: #b6a179;
+  letter-spacing: 0.12em;
+  text-align: center;
+  margin-bottom: 0.2rem;
+}
+.order-confirm-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-top: 1.2rem;
+}
+@media (max-width: 600px) {
+  .order-confirm-wrapper {
+    padding: 1.2rem 0.3rem 1rem 0.3rem;
+    max-width: 98vw;
+    margin: 1.2rem auto 1rem auto;
+  }
+  .order-confirm-card {
+    padding: 0.9rem 0.5rem 0.7rem 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .order-confirm-title {
+    font-size: 1.08rem;
+  }
+  .order-confirm-brand {
+    font-size: 1.3rem;
+  }
+}
