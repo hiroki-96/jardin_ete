@@ -1,20 +1,20 @@
 <div id="details-section" class="order-confirm-card mb-3" style="display: none;">
   <div id="usage-section" class="step-card" style="display: none;">
     <h2 class="step-title mb-3">3. 詳細</h2>
-    <%= f.label :usage_id, "用途", class: "form-label", for: "order_usage_id" %><br>
-    <%= f.collection_select(:usage_id, Usage.all, :id, :name, {}, { id: "order_usage_id", class: "form-select form-select-lg mb-3" }) %>
+    <%= f.label :usage_id, "用途", class: "form-label", for: "usage-select" %><br>
+    <%= f.collection_select(:usage_id, Usage.all, :id, :name, {}, { id: "usage-select", class: "form-select form-select-lg mb-3" }) %>
   </div>
 
   <!-- 色味の選択 -->
   <div id="color-tone-section" class="step-card" style="display: none;">
-    <%= f.label :color_tone_id, "色味", class: "form-label", for: "order_color_tone_id" %><br>
-    <%= f.collection_select(:color_tone_id, ColorTone.all, :id, :name, {}, { id: "order_color_tone_id", class: "form-select form-select-lg mb-3" }) %>
+    <%= f.label :color_tone_id, "色味", class: "form-label", for: "color-tone-select" %><br>
+    <%= f.collection_select(:color_tone_id, ColorTone.all, :id, :name, {}, { id: "color-tone-select", class: "form-select form-select-lg mb-3" }) %>
   </div>
 
   <!-- 雰囲気の選択 -->
   <div id="mood-section" class="step-card" style="display: none;">
-    <%= f.label :mood_id, "雰囲気", class: "form-label", for: "order_mood_id" %><br>
-    <%= f.collection_select(:mood_id, Mood.all, :id, :name, {}, { id: "order_mood_id", class: "form-select form-select-lg mb-3" }) %>
+    <%= f.label :mood_id, "雰囲気", class: "form-label", for: "mood-select" %><br>
+    <%= f.collection_select(:mood_id, Mood.all, :id, :name, {}, { id: "mood-select", class: "form-select form-select-lg mb-3" }) %>
   </div>
 
   <!-- 参考画像と備考 -->
