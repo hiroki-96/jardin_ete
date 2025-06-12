@@ -1,19 +1,21 @@
-<h2>花の種類を登録</h2>
-
-<%= form_with model: @flower_type, url: admin_flower_types_path, local: true, multipart: true, data: { turbo: false } do |f| %>
-  <div>
-    <%= f.label :name, "花の種類の名前" %><br>
-    <%= f.text_field :name %>
-  </div>
-
-  <div>
-    <%= f.label :image, "花の画像" %><br>
-    <%= f.file_field :image %>
-  </div>
-
-  <div>
-    <%= f.submit "登録する" %>
-  </div>
-<% end %>
-
-<%= link_to "メニュー一覧に戻る", admin_flower_types_path %>
+<div class="order-confirm-wrapper">
+  <div class="order-confirm-title mb-3">花の種類を登録</div>
+  <%= form_with model: @flower_type, url: admin_flower_types_path, local: true, multipart: true, data: { turbo: false } do |f| %>
+    <div class="order-confirm-card mb-3">
+      <div class="mb-3">
+        <%= f.label :name, "花の種類の名前", class: "form-label" %>
+        <%= f.text_field :name, class: "form-control form-control-lg" %>
+      </div>
+      <div class="mb-3">
+        <%= f.label :image, "花の画像", class: "form-label" %>
+        <div class="text-center">
+          <%= f.file_field :image, class: "form-control" %>
+        </div>
+      </div>
+      <div class="d-flex flex-column flex-md-row gap-3 align-items-center justify-content-between mt-4">
+        <%= f.submit "登録する", class: "btn btn-primary w-100" %>
+        <%= link_to "メニュー一覧に戻る", admin_flower_types_path, class: "btn btn-outline-secondary w-100" %>
+      </div>
+    </div>
+  <% end %>
+</div>

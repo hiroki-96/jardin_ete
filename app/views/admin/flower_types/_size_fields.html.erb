@@ -1,11 +1,12 @@
-<div class="size-fields">
-  <div>
-    <%= f.label :price, "価格（円）" %><br>
-    <%= f.number_field :price, required: true %>
+<div class="size-fields order-confirm-card mb-3">
+  <div class="mb-3">
+    <%= f.label :price, "価格（円）", class: "form-label" %>
+    <%= f.number_field :price, required: true, class: "form-control form-control-lg" %>
   </div>
-  <div>
-    <%= f.label :image, "参考画像（必須）" %><br>
-    <%= f.file_field :image, required: true %>
+  <div class="mb-3">
+    <%= f.label :image, "参考画像（必須）", class: "form-label" %>
+    <div class="text-center">
+      <%= f.file_field :image, required: true, class: "form-control" %>
+    </div>
   </div>
-  <hr>
 </div>

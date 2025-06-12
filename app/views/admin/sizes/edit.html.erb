@@ -1,27 +1,29 @@
-<h1><%= @flower_type.name %> の参考画像と価格を編集</h1>
+<div class="order-confirm-wrapper">
+  <div class="order-confirm-title mb-3"><%= @flower_type.name %> の参考画像と価格を編集</div>
 
-<%= form_with model: [@flower_type, @size], url: admin_flower_type_size_path(@flower_type, @size), method: :patch, local: true do |f| %>
-  <div>
-    <%= f.label :price, "価格（円）" %><br>
-    <%= f.number_field :price, step: 100 %>
-  </div>
+  <%= form_with model: [@flower_type, @size], url: admin_flower_type_size_path(@flower_type, @size), method: :patch, local: true do |f| %>
+    <div class="order-confirm-card mb-3">
+      <div class="mb-3">
+        <%= f.label :price, "価格（円）", class: "form-label" %>
+        <%= f.number_field :price, step: 100, class: "form-control form-control-lg" %>
+      </div>
 
-  <div>
-    <%= f.label :image, "参考画像" %><br>
-    <% if @size.image.attached? %>
-      <p>現在の画像:</p>
-      <%= image_tag @size.image.variant(resize_to_limit: [200, 200]) %><br>
-    <% end %>
-    <%= f.file_field :image %>
-  </div>
+      <div class="mb-3">
+        <%= f.label :image, "参考画像", class: "form-label" %>
+        <% if @size.image.attached? %>
+          <div class="text-center mb-2">
+            <p class="mb-1">現在の画像:</p>
+            <%= image_tag @size.image.variant(resize_to_limit: [200, 200]), class: "img-thumbnail" %>
+          </div>
+        <% end %>
+        <%= f.file_field :image, class: "form-control" %>
+      </div>
+    </div>
 
-  <div>
-    <%= f.submit "更新する" %>
-  </div>
-<% end %>
-
-<div style="margin-top: 20px;">
-  <%= link_to "この枠を削除する", admin_flower_type_size_path(@flower_type, @size), data: { turbo_method: :delete, confirm: "本当に削除しますか？" } %>
+    <div class="d-flex flex-column flex-md-row gap-3 align-items-center justify-content-between mt-4">
+      <%= f.submit "更新する", class: "btn btn-primary w-100" %>
+      <%= link_to "この枠を削除する", admin_flower_type_size_path(@flower_type, @size), data: { turbo_method: :delete, confirm: "本当に削除しますか？" }, class: "btn btn-danger w-100" %>
+      <%= link_to "戻る", admin_flower_type_path(@flower_type), class: "btn btn-outline-secondary w-100" %>
+    </div>
+  <% end %>
 </div>
-
-<%= link_to "戻る", admin_flower_type_path(@flower_type) %>

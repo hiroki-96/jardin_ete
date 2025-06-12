@@ -1,16 +1,27 @@
-<h1>登録メニュー一覧</h1>
+<div class="order-confirm-wrapper">
+  <div class="order-confirm-title mb-3">登録メニュー一覧</div>
+  <%= link_to '新しく花メニューを登録する', new_admin_flower_type_path, class: "btn btn-primary w-100 mb-4" %>
 
-<%= link_to '新しく花メニューを登録する', new_admin_flower_type_path, class: "button" %>
-
-<% @flower_types.each do |flower| %>
-  <div>
-    <%= link_to admin_flower_type_path(flower) do %>
-      <% if flower.image.attached? %>
-        <%= image_tag flower.image.variant(resize_to_limit: [200, 200]) %>
-      <% else %>
-        <p>画像なし</p>
-      <% end %>
-      <p><%= flower.name %></p>
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+    <% @flower_types.each do |flower| %>
+      <div class="col">
+        <div class="order-confirm-card h-100">
+          <%= link_to admin_flower_type_path(flower), class: "text-decoration-none" do %>
+            <div class="text-center mb-3">
+              <% if flower.image.attached? %>
+                <div class="text-center">
+                  <%= image_tag flower.image.variant(resize_to_limit: [200, 200]), class: "img-thumbnail mx-auto d-block" %>
+                </div>
+              <% else %>
+                <div class="img-thumbnail d-flex align-items-center justify-content-center" style="height: 200px; background: #f8f8f8;">
+                  <p class="text-muted mb-0">画像なし</p>
+                </div>
+              <% end %>
+            </div>
+            <h5 class="text-center text-dark mb-0"><%= flower.name %></h5>
+          <% end %>
+        </div>
+      </div>
     <% end %>
   </div>
-<% end %>
+</div>
