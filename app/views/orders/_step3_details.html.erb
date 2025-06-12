@@ -21,7 +21,8 @@
 <!-- 参考画像と備考 -->
 <div id="extra-section" style="display: none;">
   <%= f.label :reference_image, "参考画像をアップロード（任意）" %><br>
-  <%= f.file_field :reference_image %><br><br>
+  <%= f.file_field :reference_image, direct_upload: true %><br>
+  <%= hidden_field_tag 'order[reference_image_signed_id]', nil, id: 'reference_image_signed_id' %><br><br>
 
   <%= f.label :memo, "備考欄（任意）" %><br>
   <%= f.text_area :memo, rows: 4 %>

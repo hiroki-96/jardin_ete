@@ -78,9 +78,14 @@ document.addEventListener("turbo:load", () => {
       const radio = document.getElementById(`flower_type_${flowerTypeId}`);
       if (radio) radio.checked = true;
 
+      console.log('fetch start', flowerTypeId);
       fetch(`/flower_types/${flowerTypeId}/sizes`)
-        .then(response => response.json())
+        .then(response => {
+          console.log('fetch response', response);
+          return response.json();
+        })
         .then(sizes => {
+          console.log('sizes json', sizes);
           const h2 = sizesContainer.querySelector("h2");
           const customPriceSection = document.getElementById("custom-price-section");
 
@@ -113,6 +118,10 @@ document.addEventListener("turbo:load", () => {
               }
             });
           }
+        })
+        .catch(error => {
+          console.error('fetch error', error);
+          sizesContainer.style.display = "block";
         });
     });
   });
@@ -150,4 +159,14 @@ document.addEventListener("turbo:load", () => {
       }
     });
   });
+
+  // 参考画像アップロード時にsigned_idをhiddenにセット
+  const referenceImageInput = document.querySelector('input[type="file"][name="order[reference_image]"]');
+  const referenceImageSignedId = document.getElementById('reference_image_signed_id');
+  if (referenceImageInput && referenceImageSignedId) {
+    referenceImageInput.addEventListener('direct-upload:complete', function(event) {
+      const { signed_id } = event.detail;
+      referenceImageSignedId.value = signed_id;
+    });
+  }
 });

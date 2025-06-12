@@ -20,6 +20,11 @@ class OrdersController < ApplicationController
     @guest = @order.build_guest unless @order.guest
     @flower_types = FlowerType.all
 
+    # 参考画像のsigned_idがあれば一時的にattach
+    if params[:order] && params[:order][:reference_image_signed_id].present?
+      @order.reference_image.attach(ActiveStorage::Blob.find_signed(params[:order][:reference_image_signed_id]))
+    end
+
     unless @order.valid?
       Rails.logger.debug(@order.errors.full_messages)  # ログ出力
       flash.now[:alert] = @order.errors.full_messages.join("<br>").html_safe
@@ -37,6 +42,11 @@ class OrdersController < ApplicationController
     # セッションからデータを復元
     @order = Order.new(session[:order_data])
     @order.build_guest(session[:guest_data])
+
+    # 参考画像のsigned_idがあればattach
+    if params[:order] && params[:order][:reference_image_signed_id].present?
+      @order.reference_image.attach(ActiveStorage::Blob.find_signed(params[:order][:reference_image_signed_id]))
+    end
 
     if @order.save
       # セッション情報を削除

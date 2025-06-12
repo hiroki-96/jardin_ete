@@ -7,7 +7,17 @@
 <p><strong>用途:</strong> <%= @order.usage.name %></p>
 <p><strong>色味:</strong> <%= @order.color_tone.name %></p>
 <p><strong>雰囲気:</strong> <%= @order.mood.name %></p>
-<p><strong>参考画像:</strong> <%= image_tag @order.reference_image if @order.reference_image.attached? %></p>
+<%# 参考画像のsigned_idをhiddenで渡す（保存済みレコードのみ） %>
+<% if @order.reference_image.attached? && @order.reference_image.attachment&.record.persisted? %>
+  <%= hidden_field_tag 'order[reference_image_signed_id]', @order.reference_image.signed_id %>
+<% end %>
+<p><strong>参考画像:</strong>
+  <% if @order.reference_image.attached? %>
+    <%= image_tag @order.reference_image.variant(resize_to_limit: [300, 300]), class: "img-thumbnail", alt: "参考画像" %>
+  <% else %>
+    参考画像なし
+  <% end %>
+</p>
 <p><strong>備考:</strong> <%= @order.memo %></p>
 <p><strong>受け取り方法:</strong> <%= @order.receive_method == "store_pickup" ? "店頭受け取り" : "配達" %></p>
 <p><strong>受け取り希望日:</strong> <%= @order.receive_date %></p>
