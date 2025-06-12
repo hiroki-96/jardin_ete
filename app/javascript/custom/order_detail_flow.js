@@ -97,9 +97,9 @@ document.addEventListener("turbo:load", () => {
 
           sizes.forEach(size => {
             const html = `
-              <div class="size-card" data-size-id="${size.id}" style="margin: 10px;">
-                ${size.image_url ? `<img src="${size.image_url}" alt="参考画像" style="width: 200px;">` : ""}
-                <p>参考価格：¥${size.price}</p>
+              <div class="size-card mb-3 p-3 shadow-sm bg-white rounded-4 d-flex flex-column align-items-center text-center">
+                ${size.image_url ? `<img src="${size.image_url}" alt="参考画像" class="size-image mb-2" style="max-width: 100%; border-radius: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">` : ""}
+                <p class="size-price mb-0" style="font-size:1.1rem; font-weight:600; color:#2d2d2d;">参考価格：¥${size.price.toLocaleString()}</p>
               </div>
             `;
             sizesContainer.insertAdjacentHTML("beforeend", html);
