@@ -24,16 +24,16 @@
     <dd><%= @order.flower_type.name %></dd>
 
     <dt>金額</dt>
-    <dd>¥<%= @order.custom_price.to_s(:delimited) %></dd>
+    <dd>¥<%= @order.custom_price.present? ? number_with_delimiter(@order.custom_price) : "未設定" %></dd>
 
     <dt>用途</dt>
-    <dd><%= @order.usage %></dd>
+    <dd><%= @order.usage.name %></dd>
 
     <dt>色味</dt>
-    <dd><%= @order.color %></dd>
+    <dd><%= @order.color_tone.name %></dd>
 
     <dt>雰囲気</dt>
-    <dd><%= @order.atmosphere %></dd>
+    <dd><%= @order.mood.name %></dd>
   </dl>
 
   <h2>連絡先</h2>
