@@ -148,6 +148,8 @@
                 { selected: @order.status },
                 class: "form-select" %>
           </div>
+          <%= f.label :usage_id, "用途", class: "form-label" %>
+          <%= f.collection_select :usage_id, Usage.all, :id, :name, {}, { id: "order_usage_id", class: "form-select ..." } %>
           <%= f.submit "更新", class: "btn btn-primary" %>
         <% end %>
       </div>

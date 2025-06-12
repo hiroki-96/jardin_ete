@@ -22,6 +22,9 @@ document.addEventListener("turbo:load", () => {
   const deliveryNameInput = document.getElementById("order_delivery_name");
   const receiveTimeSelect = document.getElementById("order_receive_time");
 
+  const sizesSection = document.getElementById("sizes-section");
+  const detailsSection = document.getElementById("details-section");
+
   if (receiveTimeSelect) {
     receiveTimeSelect.required = false;
     receiveTimeSelect.disabled = true;
@@ -78,6 +81,8 @@ document.addEventListener("turbo:load", () => {
       const radio = document.getElementById(`flower_type_${flowerTypeId}`);
       if (radio) radio.checked = true;
 
+      if (sizesSection) sizesSection.style.display = "block";
+
       console.log('fetch start', flowerTypeId);
       fetch(`/flower_types/${flowerTypeId}/sizes`)
         .then(response => {
@@ -111,6 +116,7 @@ document.addEventListener("turbo:load", () => {
           if (customPriceInput) {
             customPriceInput.addEventListener("input", () => {
               if (customPriceInput.value.trim() !== "") {
+                if (detailsSection) detailsSection.style.display = "block";
                 usageSection.style.display = "block";
                 colorToneSection.style.display = "block";
                 moodSection.style.display = "block";

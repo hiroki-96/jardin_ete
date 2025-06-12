@@ -1,9 +1,9 @@
-<div id="receive-date-section" class="step-card" style="display: none;">
+<div id="receive-date-section" class="order-confirm-card mb-3" style="display: none;">
   <h2 class="step-title mb-3">5. 受け取り希望日の入力</h2>
   
-  <label id="receive-date-label" class="form-label">受け取り希望日を入力してください</label><br>
-  <%= f.label :receive_date, "希望日", class: "form-label" %><br>
-  <%= f.date_field :receive_date, min: Date.current, required: true, id: "receive-date-input", class: "form-control form-control-lg mb-2" %>
+  <label id="receive-date-label" class="form-label" for="order_receive_date">受け取り希望日を入力してください</label><br>
+  <%= f.label :receive_date, "希望日", class: "form-label", for: "order_receive_date" %><br>
+  <%= f.date_field :receive_date, min: Date.current, required: true, id: "order_receive_date", class: "form-control form-control-lg mb-2" %>
 
   <%# 配達の場合のみ表示する時間帯プルダウン %>
   <div id="delivery-time-section" style="display: none; margin-top: 10px;">

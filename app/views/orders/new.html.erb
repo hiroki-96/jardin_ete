@@ -8,31 +8,17 @@
 <%= hidden_field_tag 'selected_flower_type_id', @order.flower_type_id if @order.flower_type_id.present? %>
 
 <%= form_with model: @order, url: confirm_orders_path, method: :post, local: true, data: { turbo: false } do |f| %>
-  <div class="order-new-wrapper paris-bg py-4 px-2">
-    <div class="order-flow-title text-center mb-4">
-      <h1 class="brand-font mb-2">jardin_ete</h1>
-      <p class="order-flow-desc">パリの花屋でオーダーするような特別な体験を。</p>
-    </div>
+  <div class="order-confirm-wrapper">
+    <div class="order-confirm-brand">jardin_ete</div>
+    <div class="order-confirm-title">ご注文内容の入力</div>
     <div class="order-steps-container">
-      <div class="order-step-card mb-4">
-        <%= render 'step1_flower_types', f: f %>
-      </div>
-      <div class="order-step-card mb-4">
-        <%= render 'step2_sizes', f: f %>
-      </div>
-      <div class="order-step-card mb-4">
-        <%= render 'step3_details', f: f %>
-      </div>
-      <div class="order-step-card mb-4">
-        <%= render 'step4_receive_method', f: f %>
-      </div>
-      <div class="order-step-card mb-4">
-        <%= render 'step5_receive_date', f: f %>
-      </div>
-      <div class="order-step-card mb-4">
-        <%= render 'step6_guest_info', f: f %>
-      </div>
-      <div class="order-step-card mb-4">
+      <%= render 'step1_flower_types', f: f %>
+      <%= render 'step2_sizes', f: f %>
+      <%= render 'step3_details', f: f %>
+      <%= render 'step4_receive_method', f: f %>
+      <%= render 'step5_receive_date', f: f %>
+      <%= render 'step6_guest_info', f: f %>
+      <div class="order-confirm-btns">
         <%= render 'orders/steps/step7_submit_button', f: f %>
       </div>
     </div>
