@@ -8,47 +8,33 @@
 <%= hidden_field_tag 'selected_flower_type_id', @order.flower_type_id if @order.flower_type_id.present? %>
 
 <%= form_with model: @order, url: confirm_orders_path, method: :post, local: true, data: { turbo: false } do |f| %>
-
-  <%# ====================== %>
-  <%# --- ①花の種類の選択 --- %>
-  <%# ====================== %>
-  <%= render 'step1_flower_types', f: f %>
-
-
-  <%# ========================= %>
-  <%# --- ②サイズの選択エリア --- %>
-  <%# ========================= %>
-  <%= render "step2_sizes", f: f %> 
-
-
-  <%# ================== %>
-  <%# --- ③詳細の入力 --- %>
-  <%# ================== %>
-  <%= render 'step3_details', f: f %>
-
-
-  <%# ========================= %>
-  <%# --- ④受け取り方法の選択 --- %>
-  <%# ========================= %>
-  <%= render 'step4_receive_method', f: f %>
-
-
-  <%# ============================================== %>
-  <%# --- ⑤受け取り希望日（受け取り方法の選択後に表示） --- %>
-  <%# ============================================== %>
-  <%= render 'step5_receive_date', f: f %>
-
-
-
-  <%# ====================== %>
-  <%# --- ⑥個人情報の入力 --- %>
-  <%# ====================== %>
-  <%= render 'step6_guest_info', f: f %>
-
-
-
-  <%# ================= %>
-  <%# --- 確認ボタン --- %>
-  <%# ================= %>
-  <%= render "orders/steps/step7_submit_button", f: f %>
+  <div class="order-new-wrapper paris-bg py-4 px-2">
+    <div class="order-flow-title text-center mb-4">
+      <h1 class="brand-font mb-2">jardin_ete</h1>
+      <p class="order-flow-desc">パリの花屋でオーダーするような特別な体験を。</p>
+    </div>
+    <div class="order-steps-container">
+      <div class="order-step-card mb-4">
+        <%= render 'step1_flower_types', f: f %>
+      </div>
+      <div class="order-step-card mb-4">
+        <%= render 'step2_sizes', f: f %>
+      </div>
+      <div class="order-step-card mb-4">
+        <%= render 'step3_details', f: f %>
+      </div>
+      <div class="order-step-card mb-4">
+        <%= render 'step4_receive_method', f: f %>
+      </div>
+      <div class="order-step-card mb-4">
+        <%= render 'step5_receive_date', f: f %>
+      </div>
+      <div class="order-step-card mb-4">
+        <%= render 'step6_guest_info', f: f %>
+      </div>
+      <div class="order-step-card mb-4">
+        <%= render 'orders/steps/step7_submit_button', f: f %>
+      </div>
+    </div>
+  </div>
 <% end %>

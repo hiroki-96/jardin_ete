@@ -1,22 +1,22 @@
-<div id="guest-info-section" style="display: none;">
-  <h2>6. ご連絡先の入力</h2>
+<div id="guest-info-section" class="step-card" style="display: none;">
+  <h2 class="step-title mb-3">6. ご連絡先の入力</h2>
 
   <%= f.fields_for :guest do |g| %>
-    <%= g.label :name, "お名前" %><br>
-    <%= g.text_field :name, required: true %><br><br>
+    <%= g.label :name, "お名前", class: "form-label" %><br>
+    <%= g.text_field :name, required: true, class: "form-control form-control-lg mb-2" %><br><br>
 
-    <%= g.label :phone_number, "電話番号" %><br>
-    <%= g.telephone_field :phone_number, required: true %><br><br>
+    <%= g.label :phone_number, "電話番号", class: "form-label" %><br>
+    <%= g.telephone_field :phone_number, required: true, class: "form-control form-control-lg mb-2" %><br><br>
 
-    <%= g.label :email, "メールアドレス（任意）" %><br>
-    <%= g.email_field :email %><br><br>
+    <%= g.label :email, "メールアドレス（任意）", class: "form-label" %><br>
+    <%= g.email_field :email, class: "form-control form-control-lg mb-2" %><br><br>
   <% end %>
 
   <div id="delivery-fields" style="display: none;">
-    <%= f.label :delivery_address, "配達先住所" %><br>
-    <%= f.text_field :delivery_address, id: "order_delivery_address" %><br><br>
+    <%= f.label :delivery_address, "配達先住所", class: "form-label" %><br>
+    <%= f.text_field :delivery_address, id: "order_delivery_address", class: "form-control form-control-lg mb-2" %><br><br>
 
-    <%= f.label :delivery_name, "配達先のお名前" %><br>
-    <%= f.text_field :delivery_name, id: "order_delivery_name" %><br><br>
+    <%= f.label :delivery_name, "配達先のお名前", class: "form-label" %><br>
+    <%= f.text_field :delivery_name, id: "order_delivery_name", class: "form-control form-control-lg mb-2" %><br><br>
   </div>
 </div>
