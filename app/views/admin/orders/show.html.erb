@@ -90,6 +90,22 @@
             <div class="info-label">雰囲気</div>
             <div class="info-value"><%= @order.mood.name %></div>
           </div>
+          <div class="info-item">
+            <div class="info-label">参考画像</div>
+            <div class="info-value">
+              <% if @order.reference_image.attached? %>
+                <%= image_tag @order.reference_image.variant(resize_to_limit: [300, 300]), class: "img-thumbnail", alt: "参考画像" %>
+              <% else %>
+                参考画像なし
+              <% end %>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">備考欄</div>
+            <div class="info-value">
+              <%= @order.memo.present? ? simple_format(h(@order.memo)) : "" %>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -354,3 +354,24 @@ body {
     font-size: 0.95rem;
   }
 }
+
+.img-thumbnail {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  border: 1px solid #e0e0e0;
+  margin: 0.5rem 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.info-item .info-label {
+  font-weight: 500;
+}
+
+.info-item .info-value {
+  word-break: break-all;
+  white-space: pre-line;
+  font-size: 1rem;
+  color: #333;
+}
