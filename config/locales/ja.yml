@@ -1,0 +1,10 @@
+ja:
+  enums:
+    order:
+      status:
+        pending: "未対応"
+        in_progress: "対応中"
+        completed: "対応済"
+      receive_method:
+        store_pickup: "店頭受け取り"
+        delivery: "配達" 

@@ -21,5 +21,11 @@ Rails.application.routes.draw do
     resources :flower_types do
       resources :sizes, only: [:new, :create, :edit, :update, :destroy]
     end
+
+    resources :orders, only: [:index, :show, :destroy] do
+      member do
+        patch :update_status
+      end
+    end
   end
 end

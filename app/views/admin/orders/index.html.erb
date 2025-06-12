@@ -1,0 +1,71 @@
+<h1>注文一覧</h1>
+
+<div class="status-filter">
+  <%= form_tag admin_orders_path, method: :get do %>
+    <div class="radio-buttons">
+      <%= radio_button_tag :status, "all", @status == "all" %>
+      <%= label_tag :status_all, "一覧" %>
+
+      <%= radio_button_tag :status, "未対応", @status == "未対応" %>
+      <%= label_tag :status_未対応, "未対応" %>
+
+      <%= radio_button_tag :status, "対応中", @status == "対応中" %>
+      <%= label_tag :status_対応中, "対応中" %>
+
+      <%= radio_button_tag :status, "対応済", @status == "対応済" %>
+      <%= label_tag :status_対応済, "対応済" %>
+    </div>
+
+    <%= submit_tag "絞り込み" %>
+  <% end %>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>受け取り希望日</th>
+      <th>受け取り方法</th>
+      <th>名前</th>
+      <th>金額</th>
+      <th>配達時間帯</th>
+      <th>ステータス</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @orders.each do |order| %>
+      <tr>
+        <td><%= order.receive_date.strftime("%Y年%m月%d日") %></td>
+        <td><%= order.receive_method == "store_pickup" ? "店頭受け取り" : "配達" %></td>
+        <td><%= order.guest.name %></td>
+        <td>
+          <% if order.custom_price.present? %>
+            ¥<%= number_with_delimiter(order.custom_price) %>
+          <% else %>
+            未設定
+          <% end %>
+        </td>
+        <td>
+          <% if order.receive_method == "delivery" %>
+            <%= order.receive_time.strftime("%H:%M") %>
+          <% end %>
+        </td>
+        <td>
+          <% case order.status %>
+          <% when "pending" %>
+            未対応
+          <% when "in_progress" %>
+            対応中
+          <% when "completed" %>
+            対応済
+          <% else %>
+            未設定
+          <% end %>
+        </td>
+        <td>
+          <%= link_to "詳細", admin_order_path(order) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table> 

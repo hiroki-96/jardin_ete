@@ -17,6 +17,9 @@ class Order < ApplicationRecord
   # enum設定（店頭受け取り or 配達）
   enum receive_method: { store_pickup: 0, delivery: 1 }
 
+  # ステータス設定
+  enum status: { pending: 0, in_progress: 1, completed: 2 }, _default: :pending
+
   # ActiveHash項目のバリデーション（id: 1 は '---'）
   with_options numericality: { other_than: 1, message: "を選択してください" } do
     validates :usage_id

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_11_055849) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_12_030227) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,6 +42,12 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_11_055849) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "color_tones", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "flower_types", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -54,11 +60,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_11_055849) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "order_id"
+    t.bigint "order_id"
+    t.index ["order_id"], name: "index_guests_on_order_id"
+  end
+
+  create_table "moods", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "orders", force: :cascade do |t|
-    t.bigint "guest_id", null: false
+    t.bigint "guest_id"
     t.bigint "size_id"
     t.integer "usage_id", null: false
     t.integer "color_tone_id", null: false
@@ -66,13 +79,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_11_055849) do
     t.text "memo"
     t.integer "receive_method", null: false
     t.date "receive_date", null: false
-    t.time "receive_time", null: false
+    t.time "receive_time"
     t.string "delivery_address"
     t.string "delivery_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "flower_type_id"
     t.integer "custom_price"
+    t.integer "status", default: 0, null: false
     t.index ["guest_id"], name: "index_orders_on_guest_id"
     t.index ["size_id"], name: "index_orders_on_size_id"
   end
@@ -86,9 +100,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_11_055849) do
     t.index ["flower_type_id"], name: "index_sizes_on_flower_type_id"
   end
 
+  create_table "usages", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "orders", "guests"
+  add_foreign_key "guests", "orders"
   add_foreign_key "orders", "sizes"
   add_foreign_key "sizes", "flower_types"
 end

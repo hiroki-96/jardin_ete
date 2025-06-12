@@ -1,0 +1,66 @@
+<h1>注文詳細</h1>
+
+<div class="status-update">
+  <%= form_tag update_status_admin_order_path(@order), method: :patch do %>
+    <div class="radio-buttons">
+      <%= radio_button_tag :status, "未対応", @order.status == "pending" %>
+      <%= label_tag :status_未対応, "未対応" %>
+
+      <%= radio_button_tag :status, "対応中", @order.status == "in_progress" %>
+      <%= label_tag :status_対応中, "対応中" %>
+
+      <%= radio_button_tag :status, "対応済", @order.status == "completed" %>
+      <%= label_tag :status_対応済, "対応済" %>
+    </div>
+
+    <%= submit_tag "ステータスを更新" %>
+  <% end %>
+</div>
+
+<div class="order-details">
+  <h2>注文内容</h2>
+  <dl>
+    <dt>メニュー</dt>
+    <dd><%= @order.flower_type.name %></dd>
+
+    <dt>金額</dt>
+    <dd>¥<%= @order.custom_price.to_s(:delimited) %></dd>
+
+    <dt>用途</dt>
+    <dd><%= @order.usage %></dd>
+
+    <dt>色味</dt>
+    <dd><%= @order.color %></dd>
+
+    <dt>雰囲気</dt>
+    <dd><%= @order.atmosphere %></dd>
+  </dl>
+
+  <h2>連絡先</h2>
+  <dl>
+    <dt>名前</dt>
+    <dd><%= @order.guest.name %></dd>
+
+    <dt>電話番号</dt>
+    <dd><%= @order.guest.phone_number %></dd>
+
+    <dt>メールアドレス</dt>
+    <dd><%= @order.guest.email %></dd>
+  </dl>
+
+  <% if @order.receive_method == "delivery" %>
+    <h2>配達情報</h2>
+    <dl>
+      <dt>配達先住所</dt>
+      <dd><%= @order.delivery_address %></dd>
+
+      <dt>配達先お名前</dt>
+      <dd><%= @order.delivery_name %></dd>
+    </dl>
+  <% end %>
+</div>
+
+<div class="actions">
+  <%= link_to "一覧に戻る", admin_orders_path, class: "button" %>
+  <%= button_to "削除する", admin_order_path(@order), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "button delete" %>
+</div> 
