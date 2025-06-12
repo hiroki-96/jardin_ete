@@ -1,66 +1,140 @@
-<h1>注文詳細</h1>
+<div class="container-fluid px-3 py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="h5 mb-0 text-truncate me-3">注文詳細</h2>
+    <%= link_to "一覧に戻る", admin_orders_path, class: "btn btn-secondary mt-3" %>
+  </div>
 
-<div class="status-update">
-  <%= form_tag update_status_admin_order_path(@order), method: :patch do %>
-    <div class="radio-buttons">
-      <%= radio_button_tag :status, "未対応", @order.status == "pending" %>
-      <%= label_tag :status_未対応, "未対応" %>
-
-      <%= radio_button_tag :status, "対応中", @order.status == "in_progress" %>
-      <%= label_tag :status_対応中, "対応中" %>
-
-      <%= radio_button_tag :status, "対応済", @order.status == "completed" %>
-      <%= label_tag :status_対応済, "対応済" %>
+  <div class="order-details">
+    <!-- ステータスカード -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="h6 mb-0">現在のステータス</h5>
+          <% status_class = if @order.status == 'pending'
+              'status-pending'
+            elsif @order.status == 'in_progress'
+              'status-in-progress'
+            elsif @order.status == 'completed'
+              'status-completed'
+            else
+              'status-pending'
+            end %>
+          <span class="status-badge <%= status_class %> ms-3">
+            <% if @order.status == 'pending' %>
+              未対応
+            <% elsif @order.status == 'in_progress' %>
+              対応中
+            <% elsif @order.status == 'completed' %>
+              対応済
+            <% else %>
+              未設定
+            <% end %>
+          </span>
+        </div>
+      </div>
     </div>
 
-    <%= submit_tag "ステータスを更新" %>
-  <% end %>
-</div>
+    <!-- 注文情報カード -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-white py-3">
+        <h5 class="h6 mb-0">注文情報</h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="info-list">
+          <div class="info-item">
+            <div class="info-label">受け取り希望日</div>
+            <div class="info-value"><%= @order.receive_date&.strftime('%Y年%m月%d日') %></div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">受け取り方法</div>
+            <div class="info-value"><%= @order.receive_method == 'store_pickup' ? '店頭受け取り' : '配達' %></div>
+          </div>
+          <% if @order.delivery? %>
+            <div class="info-item">
+              <div class="info-label">配達時間</div>
+              <div class="info-value"><%= @order.receive_time&.strftime('%H:%M') %></div>
+            </div>
+          <% end %>
+          <div class="info-item">
+            <div class="info-label">お名前</div>
+            <div class="info-value"><%= @order.guest&.name %></div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">金額</div>
+            <div class="info-value price">¥<%= @order.custom_price.present? ? number_with_delimiter(@order.custom_price) : "未設定" %></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<div class="order-details">
-  <h2>注文内容</h2>
-  <dl>
-    <dt>メニュー</dt>
-    <dd><%= @order.flower_type.name %></dd>
+    <!-- 商品情報カード -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-white py-3">
+        <h5 class="h6 mb-0">商品情報</h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="info-list">
+          <div class="info-item">
+            <div class="info-label">商品名</div>
+            <div class="info-value"><%= @order.flower_type.name %></div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">カラー</div>
+            <div class="info-value"><%= @order.color_tone.name %></div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">用途</div>
+            <div class="info-value"><%= @order.usage.name %></div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">雰囲気</div>
+            <div class="info-value"><%= @order.mood.name %></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <dt>金額</dt>
-    <dd>¥<%= @order.custom_price.present? ? number_with_delimiter(@order.custom_price) : "未設定" %></dd>
+    <% if @order.delivery? %>
+      <!-- 配達情報カード -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+          <h5 class="h6 mb-0">配達情報</h5>
+        </div>
+        <div class="card-body p-0">
+          <div class="info-list">
+            <div class="info-item">
+              <div class="info-label">配達先住所</div>
+              <div class="info-value"><%= @order.delivery_address %></div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">配達先お名前</div>
+              <div class="info-value"><%= @order.delivery_name %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
 
-    <dt>用途</dt>
-    <dd><%= @order.usage.name %></dd>
-
-    <dt>色味</dt>
-    <dd><%= @order.color_tone.name %></dd>
-
-    <dt>雰囲気</dt>
-    <dd><%= @order.mood.name %></dd>
-  </dl>
-
-  <h2>連絡先</h2>
-  <dl>
-    <dt>名前</dt>
-    <dd><%= @order.guest.name %></dd>
-
-    <dt>電話番号</dt>
-    <dd><%= @order.guest.phone_number %></dd>
-
-    <dt>メールアドレス</dt>
-    <dd><%= @order.guest.email %></dd>
-  </dl>
-
-  <% if @order.receive_method == "delivery" %>
-    <h2>配達情報</h2>
-    <dl>
-      <dt>配達先住所</dt>
-      <dd><%= @order.delivery_address %></dd>
-
-      <dt>配達先お名前</dt>
-      <dd><%= @order.delivery_name %></dd>
-    </dl>
-  <% end %>
-</div>
-
-<div class="actions">
-  <%= link_to "一覧に戻る", admin_orders_path, class: "button" %>
-  <%= button_to "削除する", admin_order_path(@order), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "button delete" %>
+    <!-- ステータス更新カード -->
+    <div class="card shadow-sm">
+      <div class="card-header bg-white py-3">
+        <h5 class="h6 mb-0">ステータス更新</h5>
+      </div>
+      <div class="card-body p-3">
+        <%= form_with(model: @order, url: admin_order_path(@order), method: :patch, local: true) do |f| %>
+          <div class="form-group mb-3">
+            <%= f.select :status, 
+                [
+                  ['未対応', 'pending'],
+                  ['対応中', 'in_progress'],
+                  ['対応済', 'completed']
+                ],
+                { selected: @order.status },
+                class: "form-select" %>
+          </div>
+          <%= f.submit "更新", class: "btn btn-primary" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div> 

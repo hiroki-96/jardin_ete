@@ -1,71 +1,113 @@
-<h1>注文一覧</h1>
-
-<div class="status-filter">
-  <%= form_tag admin_orders_path, method: :get do %>
-    <div class="radio-buttons">
-      <%= radio_button_tag :status, "all", @status == "all" %>
-      <%= label_tag :status_all, "一覧" %>
-
-      <%= radio_button_tag :status, "未対応", @status == "未対応" %>
-      <%= label_tag :status_未対応, "未対応" %>
-
-      <%= radio_button_tag :status, "対応中", @status == "対応中" %>
-      <%= label_tag :status_対応中, "対応中" %>
-
-      <%= radio_button_tag :status, "対応済", @status == "対応済" %>
-      <%= label_tag :status_対応済, "対応済" %>
-    </div>
-
-    <%= submit_tag "絞り込み" %>
-  <% end %>
+<div class="admin-header">
+  <h1>注文一覧</h1>
 </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>受け取り希望日</th>
-      <th>受け取り方法</th>
-      <th>名前</th>
-      <th>金額</th>
-      <th>配達時間帯</th>
-      <th>ステータス</th>
-      <th>操作</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @orders.each do |order| %>
-      <tr>
-        <td><%= order.receive_date.strftime("%Y年%m月%d日") %></td>
-        <td><%= order.receive_method == "store_pickup" ? "店頭受け取り" : "配達" %></td>
-        <td><%= order.guest&.name || "未設定" %></td>
-        <td>
-          <% if order.custom_price.present? %>
-            ¥<%= number_with_delimiter(order.custom_price) %>
-          <% else %>
-            未設定
-          <% end %>
-        </td>
-        <td>
-          <% if order.receive_method == "delivery" %>
-            <%= order.receive_time.strftime("%H:%M") %>
-          <% end %>
-        </td>
-        <td>
-          <% case order.status %>
-          <% when "pending" %>
-            未対応
-          <% when "in_progress" %>
-            対応中
-          <% when "completed" %>
-            対応済
-          <% else %>
-            未設定
-          <% end %>
-        </td>
-        <td>
-          <%= link_to "詳細", admin_order_path(order) %>
-        </td>
-      </tr>
+<div class="container-fluid px-4">
+  <div class="status-filter">
+    <h5 class="mb-3">ステータスで絞り込む</h5>
+    <%= form_tag admin_orders_path, method: :get, class: "mb-0" do %>
+      <div class="radio-buttons mb-0">
+        <div class="form-check">
+          <%= radio_button_tag :status, "all", params[:status].nil? || params[:status] == "all", class: "form-check-input", id: "status_all" %>
+          <%= label_tag :status_all, "すべて", class: "form-check-label" %>
+        </div>
+
+        <div class="form-check">
+          <%= radio_button_tag :status, "未対応", params[:status] == "未対応", class: "form-check-input", id: "status_pending" %>
+          <%= label_tag :status_pending, "未対応", class: "form-check-label" %>
+        </div>
+
+        <div class="form-check">
+          <%= radio_button_tag :status, "対応中", params[:status] == "対応中", class: "form-check-input", id: "status_in_progress" %>
+          <%= label_tag :status_in_progress, "対応中", class: "form-check-label" %>
+        </div>
+
+        <div class="form-check">
+          <%= radio_button_tag :status, "対応済", params[:status] == "対応済", class: "form-check-input", id: "status_completed" %>
+          <%= label_tag :status_completed, "対応済", class: "form-check-label" %>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <%= submit_tag "絞り込む", class: "btn btn-primary px-4" %>
+      </div>
     <% end %>
-  </tbody>
-</table> 
+  </div>
+
+  <div class="order-cards">
+    <% @orders.each do |order| %>
+      <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div>
+            <% status_class = if order.status == 'pending'
+                'status-pending'
+              elsif order.status == 'in_progress'
+                'status-in-progress'
+              elsif order.status == 'completed'
+                'status-completed'
+              else
+                'status-pending'
+              end %>
+            <span class="status-badge <%= status_class %>">
+              <% if order.status == 'pending' %>
+                未対応
+              <% elsif order.status == 'in_progress' %>
+                対応中
+              <% elsif order.status == 'completed' %>
+                対応済
+              <% else %>
+                未設定
+              <% end %>
+            </span>
+          </div>
+          <div>
+            <% 
+              receive_method_class = order.receive_method == "store_pickup" ? "bg-light text-dark" : "bg-info"
+              receive_method_text = order.receive_method == "store_pickup" ? "店頭受け取り" : "配達"
+            %>
+            <span class="badge <%= receive_method_class %>">
+              <%= receive_method_text %>
+            </span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="order-info">
+            <div class="info-row">
+              <span class="info-label">受け取り希望日</span>
+              <span class="info-value">
+                <%= order.receive_date&.strftime("%Y年%m月%d日") || "未設定" %>
+              </span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">お名前</span>
+              <span class="info-value">
+                <%= order.guest&.name || "未設定" %>
+              </span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">金額</span>
+              <span class="info-value">
+                <% if order.custom_price.present? %>
+                  ¥<%= number_with_delimiter(order.custom_price) %>
+                <% else %>
+                  <span class="text-muted">未設定</span>
+                <% end %>
+              </span>
+            </div>
+            <% if order.receive_method == "delivery" && order.receive_time.present? %>
+              <div class="info-row">
+                <span class="info-label">配達時間</span>
+                <span class="info-value">
+                  <%= order.receive_time.strftime("%H:%M") %>
+                </span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="card-footer">
+          <%= link_to "詳細", admin_order_path(order), class: "btn btn-outline-primary w-100" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div> 

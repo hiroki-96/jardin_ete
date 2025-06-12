@@ -1,0 +1,356 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+@import "bootstrap";
+
+// カスタムスタイル
+:root {
+  --primary-color: #f8f9fa;
+  --secondary-color: #e9ecef;
+  --accent-color: #ffd1dc;
+  --text-color: #495057;
+}
+
+body {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+// ヘッダースタイル
+.admin-header {
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+.admin-header h1 {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  margin: 0;
+  font-weight: 300;
+}
+
+// テーブルスタイル
+.table {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.table th {
+  background-color: var(--secondary-color);
+  border-bottom: none;
+  font-weight: 500;
+}
+
+// ステータスバッジ
+.status-badge {
+  font-size: 1.1rem;
+  padding: 0.35em 1.2em;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-in-progress {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.status-completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+// ボタンスタイル
+.btn, .btn-primary {
+  border-radius: 2rem !important;
+  padding: 0.5rem 1.5rem;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: #007bff !important;
+  border-color: #007bff !important;
+  color: #fff !important;
+  opacity: 1 !important;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #0056b3 !important;
+    border-color: #0056b3 !important;
+  }
+}
+
+// フィルター部分
+.status-filter {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.radio-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem !important;
+}
+
+// 注文カードのスタイル
+.order-cards {
+  .card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    background-color: white;
+    border-bottom: 1px solid var(--secondary-color);
+    padding: 1rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .card-footer {
+    background-color: white;
+    border-top: 1px solid var(--secondary-color);
+    padding: 1rem;
+  }
+
+  .order-info {
+    .info-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--secondary-color);
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    .info-label {
+      color: var(--text-color);
+      font-weight: 500;
+      font-size: 0.85rem;
+      text-align: center;
+      margin-bottom: 0.25rem;
+      opacity: 0.8;
+    }
+
+    .info-value {
+      color: var(--text-color);
+      font-size: 1.1rem;
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+  }
+}
+
+// 注文詳細ページのスタイル
+.order-details {
+  .card {
+    margin-bottom: 1rem;
+    border: none;
+    border-radius: 12px;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .card-header {
+    border-bottom: 1px solid var(--secondary-color);
+  }
+
+  .info-list {
+    .info-item {
+      padding: 1rem;
+      border-bottom: 1px solid var(--secondary-color);
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    .info-label {
+      color: var(--text-color);
+      font-size: 0.875rem;
+      opacity: 0.8;
+    }
+
+    .info-value {
+      color: var(--text-color);
+      font-size: 1rem;
+      font-weight: 500;
+
+      &.price {
+        color: #dc3545;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .form-select {
+    border: 1px solid var(--secondary-color);
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    
+    &:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    padding: 0.75rem;
+    font-weight: 500;
+    border-radius: 8px;
+    
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  .status-badge {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+  }
+}
+
+// レスポンシブ対応
+@media (min-width: 768px) {
+  .order-details {
+    .info-list {
+      .info-item {
+        padding: 1.25rem;
+      }
+
+      .info-label {
+        font-size: 0.9rem;
+      }
+
+      .info-value {
+        font-size: 1.1rem;
+      }
+    }
+
+    .form-select {
+      font-size: 1.1rem;
+    }
+
+    .btn-primary {
+      padding: 0.875rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .table {
+    font-size: 0.875rem;
+  }
+  
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  .radio-buttons {
+    flex-direction: column;
+  }
+
+  .order-cards {
+    .card {
+      margin-bottom: 1rem;
+    }
+
+    .info-row {
+      padding: 0.5rem 0;
+    }
+
+    .info-label {
+      font-size: 0.8rem;
+    }
+
+    .info-value {
+      font-size: 1rem;
+    }
+  }
+
+  .order-details {
+    .card {
+      margin-bottom: 1rem;
+    }
+
+    .info-row {
+      padding: 0.75rem 0;
+    }
+
+    .form-group {
+      margin-bottom: 0.75rem;
+    }
+
+    .btn {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+.filter-form {
+  .btn-primary {
+    margin-top: 2rem;
+    width: 100%;
+    border-radius: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .filter-form .btn-primary {
+    margin-top: 2.5rem;
+    font-size: 1.1rem;
+    padding: 1rem 0;
+  }
+  .btn-secondary.mt-3 {
+    width: auto !important;
+    min-width: unset;
+    padding: 0.25rem 1rem !important;
+    font-size: 0.95rem;
+  }
+}

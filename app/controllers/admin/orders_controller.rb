@@ -1,5 +1,5 @@
 class Admin::OrdersController < ApplicationController
-  before_action :set_order, only: [:show, :destroy, :update_status]
+  before_action :set_order, only: [:show, :destroy, :update]
 
   def index
     @status = params[:status] || "all"
@@ -24,17 +24,12 @@ class Admin::OrdersController < ApplicationController
     redirect_to admin_orders_path, notice: "注文を削除しました"
   end
 
-  def update_status
-    status_map = {
-      "未対応" => :pending,
-      "対応中" => :in_progress,
-      "対応済" => :completed
-    }
-    
-    if @order.update(status: status_map[params[:status]])
-      redirect_to admin_order_path(@order), notice: "ステータスを更新しました"
+  def update
+    @order = Order.find(params[:id])
+    if @order.update(order_params)
+      redirect_to admin_order_path(@order), notice: 'ステータスを更新しました'
     else
-      redirect_to admin_order_path(@order), alert: "ステータスの更新に失敗しました"
+      redirect_to admin_order_path(@order), alert: 'ステータスの更新に失敗しました'
     end
   end
 
@@ -42,5 +37,9 @@ class Admin::OrdersController < ApplicationController
 
   def set_order
     @order = Order.find(params[:id])
+  end
+
+  def order_params
+    params.require(:order).permit(:status)
   end
 end 
