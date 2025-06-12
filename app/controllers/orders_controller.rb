@@ -44,11 +44,15 @@ class OrdersController < ApplicationController
       session.delete(:guest_data)
       session.delete(:from_confirm)
 
-      redirect_to root_path, notice: "ご注文が完了しました"
+      redirect_to thanks_orders_path, notice: "ご注文が完了しました"
     else
       @flower_types = FlowerType.all
       render :confirm
     end
+  end
+
+  def thanks
+    # 完了ページの表示
   end
 
   private
