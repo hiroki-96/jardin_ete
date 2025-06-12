@@ -1,0 +1,142 @@
+<header class="admin-header">
+  <div class="admin-header-inner">
+    <div class="admin-header-title">管理メニュー</div>
+    <button class="admin-hamburger" id="admin-hamburger-btn" aria-label="メニューを開く">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="admin-nav" id="admin-nav-menu">
+      <button class="admin-nav-close" id="admin-nav-close-btn" aria-label="メニューを閉じる">&times;</button>
+      <ul>
+        <li><%= link_to "お花の登録", admin_flower_types_path, class: "admin-nav-link" %></li>
+        <li><%= link_to "注文リスト", admin_orders_path, class: "admin-nav-link" %></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+.admin-header {
+  width: 100%;
+  background: #fff;
+  border-bottom: 2px solid #b6a179;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.admin-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0.7rem 1rem;
+}
+.admin-header-title {
+  font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #b6a179;
+  letter-spacing: 0.08em;
+}
+.admin-hamburger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+  align-items: center;
+}
+.admin-hamburger span {
+  display: block;
+  width: 24px;
+  height: 3px;
+  background: #b6a179;
+  border-radius: 2px;
+  transition: 0.3s;
+}
+.admin-hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.admin-hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.admin-hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+.admin-nav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 4px 16px rgba(182,161,121,0.08);
+  min-width: unset;
+  display: none;
+  flex-direction: column;
+  padding: 0;
+  z-index: 2000;
+  transition: transform 0.25s cubic-bezier(.4,0,.2,1);
+  transform: translateX(100%);
+}
+.admin-nav.open {
+  display: flex;
+  transform: translateX(0);
+}
+.admin-nav-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 2.2rem;
+  color: #b6a179;
+  cursor: pointer;
+  z-index: 2100;
+}
+.admin-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+.admin-nav-link {
+  display: block;
+  padding: 1.2rem 2.5rem;
+  color: #b6a179;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-decoration: none;
+  border-radius: 0.7rem;
+  transition: background 0.2s;
+  text-align: center;
+}
+.admin-nav-link:hover {
+  background: #f7f3eb;
+}
+@media (min-width: 600px) {
+  .admin-header-inner {
+    max-width: 900px;
+  }
+  .admin-nav {
+    width: 340px;
+    height: 100vh;
+    right: 0;
+    border-radius: 1.2rem 0 1.2rem 1.2rem;
+  }
+  .admin-nav ul {
+    margin-top: 100px;
+  }
+}
+</style> 

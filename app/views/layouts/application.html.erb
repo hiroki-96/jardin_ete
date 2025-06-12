@@ -11,6 +11,9 @@
   </head>
 
   <body>
+    <% if controller.controller_path.start_with?("admin/") %>
+      <%= render "layouts/admin_header" %>
+    <% end %>
     <%= yield %>
   </body>
 </html>
