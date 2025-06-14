@@ -1,4 +1,6 @@
 class FlowerTypesController < ApplicationController
+  skip_before_action :authenticate_admin!
+
   def sizes
     flower_type = FlowerType.find(params[:id])
     sizes = flower_type.sizes.ordered.select { |s| s.price.present? } # ← OK

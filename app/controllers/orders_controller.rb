@@ -1,4 +1,5 @@
 class OrdersController < ApplicationController
+  skip_before_action :authenticate_admin!
   # 注文フォームの初期表示（新規 or 修正から戻った場合）
   def new
     @order = Order.new

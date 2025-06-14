@@ -1,0 +1,155 @@
+<div class="admin-login-container">
+  <div class="admin-login-card">
+    <h2 class="admin-login-title">管理者ログイン</h2>
+
+    <% if flash[:alert] %>
+      <div class="admin-error-message"><%= flash[:alert] %></div>
+    <% end %>
+    <%= render "admins/shared/error_messages", resource: resource %>
+
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="admin-form-group">
+        <%= f.label :login_id, "ログインID", class: "admin-form-label" %>
+        <%= f.text_field :login_id, autofocus: true, autocomplete: "login_id", class: "admin-form-input" %>
+      </div>
+
+      <div class="admin-form-group">
+        <%= f.label :password, "パスワード", class: "admin-form-label" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "admin-form-input" %>
+      </div>
+
+      <% if devise_mapping.rememberable? %>
+        <div class="admin-form-group">
+          <div class="admin-checkbox-group">
+            <%= f.check_box :remember_me, class: "admin-checkbox" %>
+            <%= f.label :remember_me, "ログイン状態を保持する", class: "admin-checkbox-label" %>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="admin-form-actions">
+        <%= f.submit "ログイン", class: "admin-submit-btn" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= render "admins/shared/links" %>
+
+<style>
+.admin-login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7f3eb;
+  padding: 2rem;
+}
+
+.admin-login-card {
+  background: #fff;
+  border: 2px solid #b6a179;
+  border-radius: 1.2rem;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 16px rgba(182,161,121,0.08);
+}
+
+.admin-login-title {
+  font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+  color: #b6a179;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+  letter-spacing: 0.08em;
+}
+
+.admin-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.admin-form-label {
+  display: block;
+  color: #b6a179;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.admin-form-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #b6a179;
+  border-radius: 0.7rem;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.admin-form-input:focus {
+  outline: none;
+  border-color: #8c7a5d;
+}
+
+.admin-checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-checkbox {
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 1px solid #b6a179;
+  border-radius: 0.3rem;
+}
+
+.admin-checkbox-label {
+  color: #b6a179;
+  font-size: 0.9rem;
+}
+
+.admin-form-actions {
+  margin-top: 2rem;
+}
+
+.admin-submit-btn {
+  width: 100%;
+  padding: 1rem;
+  background: #b6a179;
+  color: #fff;
+  border: none;
+  border-radius: 0.7rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.admin-submit-btn:hover {
+  background: #8c7a5d;
+}
+
+.admin-error-message {
+  color: #f87171;
+  background: #fff0f0;
+  border: 1px solid #f87171;
+  border-radius: 0.5rem;
+  padding: 0.7rem 1rem;
+  margin-bottom: 1.2rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+@media (max-width: 480px) {
+  .admin-login-card {
+    padding: 2rem;
+  }
+  
+  .admin-login-title {
+    font-size: 1.5rem;
+  }
+}
+</style>

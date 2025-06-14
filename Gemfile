@@ -71,3 +71,5 @@ gem 'mini_magick'
 gem 'image_processing', '~> 1.2'
 gem "active_hash", "~> 3.3"
 gem 'bootstrap', '~> 5.2.3'
+gem 'devise'
+gem 'devise-i18n'

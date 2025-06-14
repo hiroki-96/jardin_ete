@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  # 管理者認証用ルート
+  devise_for :admins, controllers: {
+    sessions: 'admins/sessions'
+  }
+
   # ユーザー用ルート
   root to: 'orders#new'
 
