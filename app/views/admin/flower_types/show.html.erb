@@ -3,32 +3,32 @@
 
   <div class="order-confirm-card mb-3">
     <div class="text-center mb-3">
-      <% if @flower_type.image.attached? %>
+<% if @flower_type.image.attached? %>
         <%= image_tag @flower_type.image.variant(resize_to_limit: [300, 300]), class: "img-thumbnail mx-auto d-block" %>
-      <% else %>
+<% else %>
         <div class="img-thumbnail d-flex align-items-center justify-content-center" style="height: 300px; background: #f8f8f8;">
           <p class="text-muted mb-0">花の画像なし</p>
         </div>
-      <% end %>
+<% end %>
     </div>
   </div>
 
   <div class="order-confirm-card mb-3">
     <div class="step-title mb-3">登録されている参考画像と価格</div>
 
-    <% if @flower_type.sizes.any? %>
+<% if @flower_type.sizes.any? %>
       <div class="row row-cols-1 row-cols-md-2 g-4">
-        <% @flower_type.sizes.order(price: :asc).each do |size| %>
+  <% @flower_type.sizes.order(price: :asc).each do |size| %>
           <div class="col">
             <div class="order-confirm-card h-100">
               <div class="text-center mb-3">
-                <% if size.image.attached? %>
+      <% if size.image.attached? %>
                   <%= image_tag size.image.variant(resize_to_limit: [200, 200]), class: "img-thumbnail mx-auto d-block" %>
-                <% else %>
+      <% else %>
                   <div class="img-thumbnail d-flex align-items-center justify-content-center" style="height: 200px; background: #f8f8f8;">
                     <p class="text-muted mb-0">参考画像なし</p>
                   </div>
-                <% end %>
+      <% end %>
               </div>
               <div class="text-center mb-3">
                 <h5 class="mb-0">¥<%= number_with_delimiter(size.price) %></h5>
@@ -36,18 +36,18 @@
               <div class="text-center">
                 <%= link_to '編集', edit_admin_flower_type_size_path(@flower_type, size), class: "btn btn-outline-primary w-100" %>
               </div>
-            </div>
-          </div>
-        <% end %>
       </div>
-    <% else %>
+    </div>
+  <% end %>
+      </div>
+<% else %>
       <p class="text-center text-muted mb-0">参考画像と価格はまだ登録されていません。</p>
-    <% end %>
+<% end %>
 
     <div class="text-center mt-4">
       <%= link_to '参考画像と価格を追加する', new_admin_flower_type_size_path(@flower_type), class: "btn btn-primary w-100" %>
     </div>
-  </div>
+</div>
 
   <div class="d-flex flex-column flex-md-row gap-3 align-items-center justify-content-between mt-4">
     <%= link_to 'この花の種類を削除する', admin_flower_type_path(@flower_type), data: { turbo_method: :delete, confirm: "本当に削除しますか？" }, class: "btn btn-danger w-100" %>

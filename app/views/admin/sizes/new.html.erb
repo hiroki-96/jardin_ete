@@ -1,13 +1,13 @@
 <div class="order-confirm-wrapper">
   <div class="order-confirm-title mb-3"><%= @flower_type.name %> に参考価格と画像を追加</div>
 
-  <%= form_with model: @flower_type, url: admin_flower_type_sizes_path(@flower_type), method: :post, local: true, multipart: true do |f| %>
+<%= form_with model: @flower_type, url: admin_flower_type_sizes_path(@flower_type), method: :post, local: true, multipart: true do |f| %>
     <div class="order-confirm-card mb-3">
-      <div id="sizes-container">
-        <!-- 初期表示は空（サイズは0件） -->
-      </div>
+  <div id="sizes-container">
+    <!-- 初期表示は空（サイズは0件） -->
+  </div>
 
-      <input type="hidden" id="existing-size-count" value="<%= @existing_size_count %>">
+  <input type="hidden" id="existing-size-count" value="<%= @existing_size_count %>">
 
       <button type="button" id="add-size" class="btn btn-outline-primary w-100 mb-3">参考画像と価格を追加する</button>
     </div>
@@ -15,8 +15,8 @@
     <div class="d-flex flex-column flex-md-row gap-3 align-items-center justify-content-between mt-4">
       <%= f.submit "登録する", class: "btn btn-primary w-100" %>
       <%= link_to "戻る", admin_flower_type_path(@flower_type), class: "btn btn-outline-secondary w-100" %>
-    </div>
-  <% end %>
+  </div>
+<% end %>
 </div>
 
 <!-- 非表示テンプレート（純粋なHTML） -->

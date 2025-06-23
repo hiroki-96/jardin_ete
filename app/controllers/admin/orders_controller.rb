@@ -6,13 +6,16 @@ class Admin::OrdersController < ApplicationController
     @orders = Order.includes(:guest)
                   .order(receive_date: :asc)
 
-    case @status
-    when "未対応"
-      @orders = @orders.where(status: :pending)
-    when "対応中"
-      @orders = @orders.where(status: :in_progress)
-    when "対応済"
-      @orders = @orders.where(status: :completed)
+    status_map = {
+      "未対応" => :pending,
+      "対応中" => :in_progress,
+      "対応済" => :completed
+    }
+
+    if status_map[@status]
+      @orders = @orders.where(status: Order.statuses[status_map[@status]])
+    elsif @status == "all" || @status.blank?
+      @orders = @orders.where.not(status: :completed)
     end
   end
 

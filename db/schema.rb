@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_14_061534) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_15_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,6 +52,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_14_061534) do
     t.datetime "updated_at", null: false
     t.index ["login_id"], name: "index_admins_on_login_id", unique: true
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
+  end
+
+  create_table "business_days", force: :cascade do |t|
+    t.date "date", null: false
+    t.time "opening_time", null: false
+    t.time "closing_time", null: false
+    t.boolean "is_open", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["date"], name: "index_business_days_on_date", unique: true
   end
 
   create_table "color_tones", force: :cascade do |t|

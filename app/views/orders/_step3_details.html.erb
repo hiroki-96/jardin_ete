@@ -3,21 +3,21 @@
     <h2 class="step-title mb-3">3. 詳細</h2>
     <%= f.label :usage_id, "用途", class: "form-label", for: "usage-select" %><br>
     <%= f.collection_select(:usage_id, Usage.all, :id, :name, {}, { id: "usage-select", class: "form-select form-select-lg mb-3" }) %>
-  </div>
+</div>
 
-  <!-- 色味の選択 -->
+<!-- 色味の選択 -->
   <div id="color-tone-section" class="step-card" style="display: none;">
     <%= f.label :color_tone_id, "色味", class: "form-label", for: "color-tone-select" %><br>
     <%= f.collection_select(:color_tone_id, ColorTone.all, :id, :name, {}, { id: "color-tone-select", class: "form-select form-select-lg mb-3" }) %>
-  </div>
+</div>
 
-  <!-- 雰囲気の選択 -->
+<!-- 雰囲気の選択 -->
   <div id="mood-section" class="step-card" style="display: none;">
     <%= f.label :mood_id, "雰囲気", class: "form-label", for: "mood-select" %><br>
     <%= f.collection_select(:mood_id, Mood.all, :id, :name, {}, { id: "mood-select", class: "form-select form-select-lg mb-3" }) %>
-  </div>
+</div>
 
-  <!-- 参考画像と備考 -->
+<!-- 参考画像と備考 -->
   <div id="extra-section" class="step-card" style="display: none;">
     <%= f.label :reference_image, "参考画像をアップロード（任意）", class: "form-label" %><br>
     <%= f.file_field :reference_image, direct_upload: true, class: "form-control mb-2" %>

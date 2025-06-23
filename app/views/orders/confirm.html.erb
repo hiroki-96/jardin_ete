@@ -25,17 +25,17 @@
   <div class="order-confirm-card mb-3">
     <div class="mb-2"><strong>受け取り方法:</strong> <%= @order.receive_method == "store_pickup" ? "店頭受け取り" : "配達" %></div>
     <div class="mb-2"><strong>受け取り希望日:</strong> <%= @order.receive_date %></div>
-    <% if @order.delivery? %>
+<% if @order.delivery? %>
       <div class="mb-2"><strong>配達希望時間:</strong>
-        <% label = case @order.receive_time.strftime("%H:%M")
-          when "09:00" then "午前中"
-          when "12:00" then "12:00〜15:00"
-          when "15:00" then "15:00〜18:00"
-          when "18:00" then "18時以降"
-          else
-            @order.receive_time.strftime("%H:%M")
-        end %>
-        <%= label %>
+    <% label = case @order.receive_time.strftime("%H:%M")
+      when "09:00" then "午前中"
+      when "12:00" then "12:00〜15:00"
+      when "15:00" then "15:00〜18:00"
+      when "18:00" then "18時以降"
+      else
+        @order.receive_time.strftime("%H:%M")
+    end %>
+    <%= label %>
       </div>
       <div class="mb-2"><strong>配達先の名前:</strong> <%= @order.delivery_name %></div>
       <div class="mb-2"><strong>配達先の住所:</strong> <%= @order.delivery_address %></div>
@@ -53,6 +53,6 @@
         <%= hidden_field_tag 'order[reference_image_signed_id]', @order.reference_image.signed_id %>
       <% end %>
       <%= submit_tag "この内容で確定する", class: "btn btn-primary w-100" %>
-    <% end %>
+<% end %>
   </div>
 </div>

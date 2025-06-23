@@ -1,0 +1,448 @@
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>営業日カレンダー管理</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+  <%= javascript_include_tag 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js' %>
+  <%= javascript_include_tag 'https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/locales-all.global.min.js' %>
+  <%= javascript_include_tag 'https://cdn.jsdelivr.net/npm/flatpickr' %>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <style>
+    .admin-business-days-wrapper {
+      max-width: 950px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 1.6rem;
+      box-shadow: 0 8px 32px rgba(182,161,121,0.13);
+      padding: 2.5rem 2rem;
+    }
+    .admin-title {
+      color: #b6a179;
+      font-size: 1.9rem;
+      font-weight: 800;
+      margin-bottom: 2.2rem;
+      text-align: center;
+      letter-spacing: 0.08em;
+      font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+      text-shadow: 0 2px 8px rgba(182,161,121,0.13);
+    }
+    #business-calendar {
+      background: #f7f3eb;
+      border-radius: 1.6rem;
+      padding: 2.2rem 1.2rem 2.2rem 1.2rem;
+      margin-bottom: 2.2rem;
+      overflow-x: auto;
+      font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+      box-shadow: 0 4px 24px rgba(182,161,121,0.10);
+    }
+    /* カレンダーの下線・リンク装飾を徹底的に消す */
+    .fc .fc-daygrid-day-number,
+    .fc .fc-day-number-modern,
+    .fc .fc-daygrid-day-top,
+    .fc .fc-col-header-cell,
+    .fc .fc-daygrid-day,
+    .fc .fc-scrollgrid,
+    .fc .fc-scrollgrid-section,
+    .fc .fc-scrollgrid-sync-table,
+    .fc .fc-scrollgrid-sync-inner,
+    .fc .fc-scrollgrid-sync-row,
+    .fc .fc-scrollgrid-section-header,
+    .fc .fc-scrollgrid-section-body,
+    .fc a,
+    .fc a:visited,
+    .fc a:active,
+    .fc a:link,
+    .fc a:hover {
+      text-decoration: none !important;
+      border: none !important;
+      border-bottom: none !important;
+      border-top: none !important;
+      border-left: none !important;
+      border-right: none !important;
+      box-shadow: none !important;
+      color: #b6a179 !important;
+      background: none !important;
+    }
+    .fc .fc-day-header-modern,
+    .fc .fc-day-number-modern {
+      color: #b6a179 !important;
+      font-size: 1.18rem;
+      font-weight: 800;
+      font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+      line-height: 2.2em;
+      height: 2.2em;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      background: none;
+      border: none !important;
+      box-shadow: none;
+      letter-spacing: 0.08em;
+      border-bottom: none !important;
+      display: block;
+      vertical-align: middle;
+    }
+    .fc .fc-col-header-cell,
+    .fc .fc-daygrid-day {
+      height: 2.2em !important;
+      min-height: 0 !important;
+      vertical-align: middle !important;
+      padding: 0 !important;
+    }
+    .fc-daygrid-day {
+      border-bottom: none !important;
+      position: relative;
+    }
+    .fc-daygrid-day.fc-day-today {
+      background: #f3e9d2 !important;
+      border-radius: 1.2rem;
+      box-shadow: 0 2px 12px rgba(182,161,121,0.10);
+      border: 1.5px solid #e7d7b1 !important;
+    }
+    .fc-event,
+    .fc-event-title,
+    .fc-event-main,
+    .fc-event-main-frame,
+    .fc-event-title-container,
+    .fc-event .fc-event-title,
+    .fc-event .fc-event-main,
+    .fc-event .fc-event-main-frame,
+    .fc-event .fc-event-title-container {
+      color: #b6a179 !important;
+      font-weight: 900 !important;
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      font-size: 1.08rem !important;
+      font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+      box-shadow: none !important;
+      padding: 0.1em 0 !important;
+      margin: 0.1em auto !important;
+      display: block !important;
+      min-width: 0;
+      text-align: center;
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+      max-width: 100%;
+      white-space: normal !important;
+      word-break: break-all !important;
+      overflow-wrap: break-word !important;
+    }
+    .fc .fc-daygrid-day {
+      border-right: 1px solid #e7d7b1 !important;
+      border-bottom: 1px solid #e7d7b1 !important;
+      background: none;
+    }
+    .fc .fc-daygrid-day:last-child {
+      border-right: none !important;
+    }
+    .fc .fc-daygrid-week:last-child .fc-daygrid-day {
+      border-bottom: none !important;
+    }
+    .modal-content {
+      border-radius: 1rem;
+    }
+    /* 営業時間のtime inputを15分単位に */
+    #modal-opening-time, #modal-closing-time {
+      step: 900;
+    }
+    @media (max-width: 600px) {
+      .admin-business-days-wrapper {
+        padding: 1rem 0.2rem;
+      }
+      .admin-title {
+        font-size: 1.2rem;
+        margin-bottom: 1.2rem;
+      }
+      #business-calendar {
+        padding: 0.2rem;
+        min-width: 340px;
+        font-size: 0.95rem;
+      }
+      .fc .fc-toolbar-title {
+        font-size: 1.1rem;
+      }
+      .modal-dialog {
+        max-width: 95vw;
+        margin: 0.5rem auto;
+      }
+      .modal-content {
+        font-size: 1rem;
+        padding: 0.5rem;
+      }
+      .btn, .form-control, .form-select {
+        font-size: 1.05rem;
+        padding: 0.7rem 0.8rem;
+      }
+      .fc-daygrid-day {
+        min-width: 38px;
+        min-height: 38px;
+        padding: 2px;
+      }
+      .fc-event,
+      .fc-event-title,
+      .fc-event-main,
+      .fc-event-main-frame,
+      .fc-event-title-container,
+      .fc-event .fc-event-title,
+      .fc-event .fc-event-main,
+      .fc-event .fc-event-main-frame,
+      .fc-event .fc-event-title-container {
+        font-size: 0.95rem !important;
+        line-height: 1.1 !important;
+      }
+    }
+    .flatpickr-calendar {
+      font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+      border-radius: 1.2em;
+      box-shadow: 0 4px 24px rgba(182,161,121,0.13);
+      border: 1.5px solid #e7d7b1;
+    }
+    .flatpickr-time {
+      border-top: 1px solid #e7d7b1;
+    }
+    .flatpickr-time input,
+    .flatpickr-time .flatpickr-am-pm {
+      font-size: 1.15rem;
+      color: #b6a179;
+      font-weight: 700;
+      border-radius: 0.7em;
+      border: 1.2px solid #e7d7b1;
+      background: #f7f3eb;
+    }
+    .flatpickr-time input:focus {
+      border-color: #b6a179;
+      outline: none;
+    }
+    .flatpickr-am-pm.selected,
+    .flatpickr-am-pm:hover {
+      background: #b6a179;
+      color: #fff;
+    }
+    .flatpickr-minute,
+    .flatpickr-hour {
+      color: #b6a179;
+    }
+    .flatpickr-time-separator {
+      color: #b6a179;
+      font-weight: 700;
+    }
+  </style>
+</head>
+
+<div class="admin-business-days-wrapper">
+  <h2 class="admin-title">営業日カレンダー管理</h2>
+  <div id="business-calendar"></div>
+
+  <!-- 営業日編集モーダル -->
+  <div class="modal fade" id="businessDayModal" tabindex="-1" aria-labelledby="businessDayModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm modal-mobile">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="businessDayModalLabel">営業日を編集</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+        </div>
+        <div class="modal-body">
+          <form id="business-day-form">
+            <input type="hidden" id="modal-date" name="date">
+            <div class="mb-3">
+              <label for="modal-is-open" class="form-label">営業/休業</label>
+              <select id="modal-is-open" name="is_open" class="form-select">
+                <option value="true">営業</option>
+                <option value="false">休業</option>
+              </select>
+            </div>
+            <div class="mb-3 time-fields">
+              <label for="modal-opening-time" class="form-label">開始時刻</label>
+              <input type="text" class="form-control" id="modal-opening-time" name="opening_time" required autocomplete="off">
+            </div>
+            <div class="mb-3 time-fields">
+              <label for="modal-closing-time" class="form-label">終了時刻</label>
+              <input type="text" class="form-control" id="modal-closing-time" name="closing_time" required autocomplete="off">
+            </div>
+            <div class="d-flex flex-column flex-md-row gap-2 justify-content-between">
+              <button type="submit" class="btn btn-primary w-100" id="modal-save-btn" name="modal-save-btn">保存</button>
+              <button type="button" id="delete-business-day" class="btn btn-outline-danger w-100" name="delete-business-day">営業日データ削除</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("turbo:load", function() {
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  fetch("/admin/business_days.json")
+    .then(response => response.json())
+    .then(data => {
+      const calendarEl = document.getElementById('business-calendar');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'ja',
+        height: window.innerWidth < 600 ? 500 : 700,
+        contentHeight: 'auto',
+        aspectRatio: window.innerWidth < 600 ? 0.8 : 1.35,
+        selectable: true,
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: ''
+        },
+        dayHeaderContent: function(arg) {
+          const days = ['日', '月', '火', '水', '木', '金', '土'];
+          const span = document.createElement('span');
+          span.className = 'fc-day-header-modern';
+          span.textContent = days[arg.date.getDay()];
+          return { domNodes: [span] };
+        },
+        dayCellContent: function(arg) {
+          const span = document.createElement('span');
+          span.className = 'fc-day-number-modern';
+          span.textContent = arg.dayNumberText.replace(/日/, '');
+          return { domNodes: [span] };
+        },
+        events: data.filter(day => day.is_open).map(day => ({
+          title: `${day.opening_time}~${day.closing_time}`,
+          start: day.date,
+          allDay: true,
+          color: 'transparent',
+          textColor: '#b6a179',
+          borderColor: 'transparent',
+          display: 'auto',
+          extendedProps: day
+        })),
+        dateClick: function(info) {
+          openBusinessDayModal(info.dateStr, data);
+        },
+        eventClick: function(info) {
+          openBusinessDayModal(info.event.startStr, data);
+        },
+        dayMaxEventRows: true,
+        fixedWeekCount: false,
+        dayHeaderFormat: { weekday: 'short' },
+        dayCellDidMount: function(arg) {
+          if(window.innerWidth < 600) {
+            arg.el.style.fontSize = '0.95rem';
+            arg.el.style.padding = '2px';
+          }
+        },
+        datesSet: function() {
+          setTimeout(adjustCalendarCellHeights, 10);
+        }
+      });
+      calendar.render();
+      setTimeout(adjustCalendarCellHeights, 20);
+      window.addEventListener('resize', function() {
+        setTimeout(adjustCalendarCellHeights, 20);
+      });
+    });
+
+  function adjustCalendarCellHeights() {
+    // 曜日ヘッダーの高さを取得
+    const headerCells = document.querySelectorAll('.fc-col-header-cell');
+    if (!headerCells.length) return;
+    const headerHeight = headerCells[0].offsetHeight;
+    // 日付セルの高さを揃える
+    document.querySelectorAll('.fc-daygrid-day').forEach(cell => {
+      cell.style.height = headerHeight + 'px';
+      cell.style.minHeight = headerHeight + 'px';
+      cell.style.maxHeight = headerHeight + 'px';
+      cell.style.verticalAlign = 'middle';
+    });
+    // 日付数字のspanも中央に
+    document.querySelectorAll('.fc-day-number-modern').forEach(span => {
+      span.style.lineHeight = headerHeight + 'px';
+      span.style.height = headerHeight + 'px';
+      span.style.display = 'block';
+      span.style.margin = '0';
+      span.style.padding = '0';
+    });
+  }
+
+  function openBusinessDayModal(dateStr, data) {
+    const day = data.find(d => d.date === dateStr);
+    document.getElementById('modal-date').value = dateStr;
+    document.getElementById('modal-is-open').value = day ? String(day.is_open) : 'false';
+    document.getElementById('modal-opening-time').value = day && day.is_open ? day.opening_time : '';
+    document.getElementById('modal-closing-time').value = day && day.is_open ? day.closing_time : '';
+    toggleTimeFields();
+    const modal = new bootstrap.Modal(document.getElementById('businessDayModal'));
+    modal.show();
+    document.getElementById('delete-business-day').style.display = day ? 'inline-block' : 'none';
+  }
+
+  document.getElementById('modal-is-open').addEventListener('change', toggleTimeFields);
+  function toggleTimeFields() {
+    const isOpen = document.getElementById('modal-is-open').value === 'true';
+    document.querySelectorAll('.time-fields').forEach(el => {
+      el.style.display = isOpen ? 'block' : 'none';
+    });
+  }
+
+  document.getElementById('business-day-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const date = document.getElementById('modal-date').value;
+    const is_open = document.getElementById('modal-is-open').value === 'true';
+    const opening_time = document.getElementById('modal-opening-time').value;
+    const closing_time = document.getElementById('modal-closing-time').value;
+    fetch(`/admin/business_days`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken },
+      body: JSON.stringify({ business_day: { date, is_open, opening_time, closing_time } })
+    }).then(() => window.location.reload());
+  });
+
+  document.getElementById('delete-business-day').addEventListener('click', function() {
+    const date = document.getElementById('modal-date').value;
+    fetch(`/admin/business_days/set_closed_by_date?date=${date}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken },
+      body: JSON.stringify({ is_open: false })
+    }).then(() => window.location.reload());
+  });
+
+  // flatpickrのインスタンスを保持する変数
+  let openingTimePicker = null;
+  let closingTimePicker = null;
+
+  // モーダルが開かれたときにflatpickrを初期化
+  document.getElementById('businessDayModal').addEventListener('shown.bs.modal', function () {
+    if (openingTimePicker) openingTimePicker.destroy();
+    if (closingTimePicker) closingTimePicker.destroy();
+    openingTimePicker = flatpickr("#modal-opening-time", {
+      enableTime: true,
+      noCalendar: true,
+      dateFormat: "H:i",
+      time_24hr: true,
+      minuteIncrement: 15,
+      allowInput: false,
+      defaultHour: 9,
+      defaultMinute: 0,
+      disableMobile: true
+    });
+    closingTimePicker = flatpickr("#modal-closing-time", {
+      enableTime: true,
+      noCalendar: true,
+      dateFormat: "H:i",
+      time_24hr: true,
+      minuteIncrement: 15,
+      allowInput: false,
+      defaultHour: 17,
+      defaultMinute: 0,
+      disableMobile: true
+    });
+  });
+
+  // モーダルが閉じられたときにflatpickrを破棄
+  document.getElementById('businessDayModal').addEventListener('hidden.bs.modal', function () {
+    if (openingTimePicker) openingTimePicker.destroy();
+    if (closingTimePicker) closingTimePicker.destroy();
+  });
+});
+</script> 

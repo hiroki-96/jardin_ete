@@ -28,5 +28,10 @@ Rails.application.routes.draw do
     end
 
     resources :orders, only: [:index, :show, :destroy, :update]
+    resources :business_days do
+      collection do
+        patch :set_closed_by_date
+      end
+    end
   end
 end

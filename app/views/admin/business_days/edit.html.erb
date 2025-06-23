@@ -1,0 +1,48 @@
+<div class="admin-business-days-wrapper">
+  <h2 class="admin-title">営業日を編集</h2>
+  <%= form_with model: @business_day, url: admin_business_day_path(@business_day), method: :patch, local: true do |f| %>
+    <div class="row g-2 align-items-end">
+      <div class="col-md-3">
+        <%= f.label :date, '日付', class: 'form-label' %>
+        <%= f.date_field :date, class: 'form-control', readonly: true %>
+      </div>
+      <div class="col-md-2">
+        <%= f.label :is_open, '営業', class: 'form-label' %>
+        <%= f.select :is_open, [['営業', true], ['休業', false]], {}, class: 'form-select' %>
+      </div>
+      <div class="col-md-2">
+        <%= f.label :opening_time, '開始時刻', class: 'form-label', for: 'edit-opening-time' %>
+        <%= f.text_field :opening_time, class: 'form-control', id: 'edit-opening-time', name: 'business_day[opening_time]', autocomplete: 'off', required: true %>
+      </div>
+      <div class="col-md-2">
+        <%= f.label :closing_time, '終了時刻', class: 'form-label', for: 'edit-closing-time' %>
+        <%= f.text_field :closing_time, class: 'form-control', id: 'edit-closing-time', name: 'business_day[closing_time]', autocomplete: 'off', required: true %>
+      </div>
+      <div class="col-md-2">
+        <%= f.submit '更新', class: 'btn btn-primary w-100' %>
+      </div>
+    </div>
+  <% end %>
+  <div class="mt-4">
+    <%= link_to '一覧に戻る', admin_business_days_path, class: 'btn btn-outline-secondary' %>
+  </div>
+</div>
+
+<style>
+.admin-business-days-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 16px rgba(182,161,121,0.08);
+  padding: 2.5rem 2rem;
+}
+.admin-title {
+  color: #b6a179;
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+  letter-spacing: 0.08em;
+}
+</style> 

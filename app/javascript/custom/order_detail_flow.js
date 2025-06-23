@@ -25,10 +25,50 @@ document.addEventListener("turbo:load", () => {
   const sizesSection = document.getElementById("sizes-section");
   const detailsSection = document.getElementById("details-section");
 
+  // 非表示状態のフィールドのrequired属性を一時的に削除
+  function removeRequiredFromHiddenFields() {
+    const hiddenSections = [
+      receiveMethodSection,
+      receiveDateSection,
+      guestInfoSection
+    ];
+
+    hiddenSections.forEach(section => {
+      if (section && section.style.display === "none") {
+        const requiredFields = section.querySelectorAll('[required]');
+        requiredFields.forEach(field => {
+          field.removeAttribute('required');
+          field.dataset.wasRequired = 'true';
+        });
+      }
+    });
+  }
+
+  // フィールドを表示する際にrequired属性を復元
+  function restoreRequiredForVisibleFields() {
+    const visibleSections = [
+      receiveMethodSection,
+      receiveDateSection,
+      guestInfoSection
+    ];
+
+    visibleSections.forEach(section => {
+      if (section && section.style.display !== "none") {
+        const fieldsWithRequired = section.querySelectorAll('[data-was-required="true"]');
+        fieldsWithRequired.forEach(field => {
+          field.setAttribute('required', 'true');
+        });
+      }
+    });
+  }
+
   if (receiveTimeSelect) {
     receiveTimeSelect.required = false;
     receiveTimeSelect.disabled = true;
   }
+
+  // 初期化時に非表示フィールドのrequired属性を削除
+  removeRequiredFromHiddenFields();
 
   function updateReceiveTimeField() {
     const receiveMethod = document.querySelector('input[name="order[receive_method]"]:checked')?.value;
@@ -42,6 +82,7 @@ document.addEventListener("turbo:load", () => {
     receiveTimeSelect.disabled = true;
 
     receiveDateSection.style.display = "block";
+    restoreRequiredForVisibleFields();
 
     if (receiveMethod === "delivery") {
       deliveryTimeSection.style.display = "block";
@@ -66,6 +107,7 @@ document.addEventListener("turbo:load", () => {
     });
 
     updateReceiveTimeField();
+    restoreRequiredForVisibleFields();
     sessionStorage.removeItem("fromConfirm");
   }
 
@@ -139,6 +181,7 @@ document.addEventListener("turbo:load", () => {
       moodSelect?.value && moodSelect.value !== "1"
     ) {
       receiveMethodSection.style.display = "block";
+      restoreRequiredForVisibleFields();
     }
   }
 
@@ -154,6 +197,7 @@ document.addEventListener("turbo:load", () => {
     input.addEventListener("change", () => {
       guestInfoSection.style.display = "block";
       submitSection.style.display = "block";
+      restoreRequiredForVisibleFields();
 
       const isDelivery = document.getElementById("delivery")?.checked;
       if (isDelivery) {
