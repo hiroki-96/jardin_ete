@@ -1,6 +1,6 @@
 <div id="details-section" class="order-confirm-card mb-3" style="display: none;">
   <div id="usage-section" class="step-card" style="display: none;">
-    <h2 class="step-title mb-3">3. 詳細</h2>
+    <h2 class="step-title mb-3">5. 詳細</h2>
     <%= f.label :usage_id, "用途", class: "form-label", for: "usage-select" %><br>
     <%= f.collection_select(:usage_id, Usage.all, :id, :name, {}, { id: "usage-select", class: "form-select form-select-lg mb-3" }) %>
 </div>

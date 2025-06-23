@@ -12,12 +12,12 @@
     <div class="order-confirm-brand">jardin_ete</div>
     <div class="order-confirm-title">ご注文内容の入力</div>
     <div class="order-steps-container">
-  <%= render 'step1_flower_types', f: f %>
+      <%= render 'step1_flower_types', f: f %>
+      <%= render 'step4_receive_method', f: f %>
+      <%= render 'step5_receive_date', f: f %>
       <%= render 'step2_sizes', f: f %>
-  <%= render 'step3_details', f: f %>
-  <%= render 'step4_receive_method', f: f %>
-  <%= render 'step5_receive_date', f: f %>
-  <%= render 'step6_guest_info', f: f %>
+      <%= render 'step3_details', f: f %>
+      <%= render 'step6_guest_info', f: f %>
       <div class="order-confirm-btns">
         <%= render 'orders/steps/step7_submit_button', f: f %>
       </div>

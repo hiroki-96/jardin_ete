@@ -30,7 +30,9 @@ document.addEventListener("turbo:load", () => {
     const hiddenSections = [
       receiveMethodSection,
       receiveDateSection,
-      guestInfoSection
+      guestInfoSection,
+      sizesSection,
+      detailsSection
     ];
 
     hiddenSections.forEach(section => {
@@ -49,7 +51,9 @@ document.addEventListener("turbo:load", () => {
     const visibleSections = [
       receiveMethodSection,
       receiveDateSection,
-      guestInfoSection
+      guestInfoSection,
+      sizesSection,
+      detailsSection
     ];
 
     visibleSections.forEach(section => {
@@ -81,9 +85,6 @@ document.addEventListener("turbo:load", () => {
     receiveTimeSelect.required = false;
     receiveTimeSelect.disabled = true;
 
-    receiveDateSection.style.display = "block";
-    restoreRequiredForVisibleFields();
-
     if (receiveMethod === "delivery") {
       deliveryTimeSection.style.display = "block";
       deliveryFields.style.display = "block";
@@ -94,9 +95,9 @@ document.addEventListener("turbo:load", () => {
 
   if (fromConfirm === "true") {
     const sections = [
-      "sizes-container", "usage-section", "color-tone-section", "mood-section",
-      "extra-section", "receive-method-section", "receive-date-section",
-      "guest-info-section", "submit-section"
+      "sizes-container", "receive-method-section", "receive-date-section",
+      "usage-section", "color-tone-section", "mood-section",
+      "extra-section", "guest-info-section", "submit-section"
     ];
     if (receiveMethod === "delivery") {
       sections.push("delivery-time-section");
@@ -123,7 +124,9 @@ document.addEventListener("turbo:load", () => {
       const radio = document.getElementById(`flower_type_${flowerTypeId}`);
       if (radio) radio.checked = true;
 
-      if (sizesSection) sizesSection.style.display = "block";
+      // 花種選択後、受け取り方法のみを表示
+      receiveMethodSection.style.display = "block";
+      restoreRequiredForVisibleFields();
 
       console.log('fetch start', flowerTypeId);
       fetch(`/flower_types/${flowerTypeId}/sizes`)
@@ -152,6 +155,7 @@ document.addEventListener("turbo:load", () => {
             sizesContainer.insertAdjacentHTML("beforeend", html);
           });
 
+          // サイズコンテナは表示するが、サイズセクション全体はまだ非表示
           sizesContainer.style.display = "block";
 
           const customPriceInput = document.getElementById("order_custom_price");
@@ -163,6 +167,7 @@ document.addEventListener("turbo:load", () => {
                 colorToneSection.style.display = "block";
                 moodSection.style.display = "block";
                 extraSection.style.display = "block";
+                restoreRequiredForVisibleFields();
               }
             });
           }
@@ -174,39 +179,27 @@ document.addEventListener("turbo:load", () => {
     });
   });
 
-  function checkAndShowReceiveMethod() {
-    if (
-      usageSelect?.value && usageSelect.value !== "1" &&
-      colorToneSelect?.value && colorToneSelect.value !== "1" &&
-      moodSelect?.value && moodSelect.value !== "1"
-    ) {
-      receiveMethodSection.style.display = "block";
-      restoreRequiredForVisibleFields();
-    }
-  }
+  // 受け取り方法選択時の処理
+  document.getElementById("pickup")?.addEventListener("change", () => {
+    updateReceiveTimeField();
+    // 受け取り方法選択後、日付選択を表示
+    receiveDateSection.style.display = "block";
+    restoreRequiredForVisibleFields();
+  });
 
-  usageSelect?.addEventListener("change", checkAndShowReceiveMethod);
-  colorToneSelect?.addEventListener("change", checkAndShowReceiveMethod);
-  moodSelect?.addEventListener("change", checkAndShowReceiveMethod);
-
-  document.getElementById("pickup")?.addEventListener("change", updateReceiveTimeField);
-  document.getElementById("delivery")?.addEventListener("change", updateReceiveTimeField);
+  document.getElementById("delivery")?.addEventListener("change", () => {
+    updateReceiveTimeField();
+    // 受け取り方法選択後、日付選択を表示
+    receiveDateSection.style.display = "block";
+    restoreRequiredForVisibleFields();
+  });
 
   const dateInputs = document.querySelectorAll("input[name='order[receive_date]']");
   dateInputs.forEach(input => {
     input.addEventListener("change", () => {
-      guestInfoSection.style.display = "block";
-      submitSection.style.display = "block";
+      // 日付選択後、サイズセクションを表示
+      if (sizesSection) sizesSection.style.display = "block";
       restoreRequiredForVisibleFields();
-
-      const isDelivery = document.getElementById("delivery")?.checked;
-      if (isDelivery) {
-        deliveryFields.style.display = "block";
-      } else {
-        deliveryFields.style.display = "none";
-        if (deliveryAddressInput) deliveryAddressInput.value = "";
-        if (deliveryNameInput) deliveryNameInput.value = "";
-      }
     });
   });
 
@@ -219,4 +212,38 @@ document.addEventListener("turbo:load", () => {
       referenceImageSignedId.value = signed_id;
     });
   }
+
+  // 詳細セクションの選択肢変更時の処理
+  usageSelect?.addEventListener("change", () => {
+    // 詳細入力完了後、連絡先情報を表示
+    if (usageSelect.value && usageSelect.value !== "1" &&
+        colorToneSelect?.value && colorToneSelect.value !== "1" &&
+        moodSelect?.value && moodSelect.value !== "1") {
+      guestInfoSection.style.display = "block";
+      submitSection.style.display = "block";
+      restoreRequiredForVisibleFields();
+    }
+  });
+
+  colorToneSelect?.addEventListener("change", () => {
+    // 詳細入力完了後、連絡先情報を表示
+    if (usageSelect?.value && usageSelect.value !== "1" &&
+        colorToneSelect.value && colorToneSelect.value !== "1" &&
+        moodSelect?.value && moodSelect.value !== "1") {
+      guestInfoSection.style.display = "block";
+      submitSection.style.display = "block";
+      restoreRequiredForVisibleFields();
+    }
+  });
+
+  moodSelect?.addEventListener("change", () => {
+    // 詳細入力完了後、連絡先情報を表示
+    if (usageSelect?.value && usageSelect.value !== "1" &&
+        colorToneSelect?.value && colorToneSelect.value !== "1" &&
+        moodSelect.value && moodSelect.value !== "1") {
+      guestInfoSection.style.display = "block";
+      submitSection.style.display = "block";
+      restoreRequiredForVisibleFields();
+    }
+  });
 });
